@@ -1,6 +1,9 @@
 package com.nick;
 
 import com.nick.config.MyErrorPageRegister;
+import com.nick.model.User;
+import com.nick.repository.mongo.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -17,8 +20,16 @@ import java.util.concurrent.TimeUnit;
  */
 @SpringBootApplication
 public class Example {
+    @Autowired
+    private UserDao repository;
+
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Example.class, args);
+    }
+
+    public void run() throws Exception{
+        User user = repository.findByName("covilla");
+        System.out.println(user);
     }
 
     @Bean

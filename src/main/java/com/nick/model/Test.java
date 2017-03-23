@@ -1,9 +1,7 @@
 package com.nick.model;
 
-import org.springframework.data.annotation.Id;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -13,7 +11,6 @@ import javax.persistence.Table;
 @Table(name = "test")
 public class Test {
     @Id
-    @GeneratedValue
     private Integer id;
     private String name;
 
