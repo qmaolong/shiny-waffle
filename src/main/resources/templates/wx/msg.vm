@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    #parse("common/base-wx.vm")
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="$URL/asset/wx/css/weui.min.css" ></link>
+    <title>$TITLE</title>
+</head>
+<body ontouchstart>
+<div class="weui_msg">
+    <div class="weui_icon_area"><i class="#if($msgType=="warn")weui_icon_warn#elseif($msgType=="success")weui_icon_success#elseif($msgType=="error")weui_icon_warn#end weui_icon_msg"></i></div>
+    <div class="weui_text_area">
+        <p class="weui_msg_desc">$!message</p>
+    </div>
+</div>
+</body>
+</html>

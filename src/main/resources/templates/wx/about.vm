@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    #parse("common/base-wx.vm")
+    <meta charset="utf-8">
+    <title>克维拉收银系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="/asset/wx/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="/asset/wx/css/app.css"/>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">关于我们</h1>
+</header>
+<div class="mui-content">
+    <div class="mui-content-padded">
+        #*<h1>h1. Heading</h1>
+        <h2>h2. Heading</h2>
+        <h3>h3. Heading</h3>
+        <h4>h4. Heading</h4>
+        <h5>h5. Heading</h5>
+        <h6>h6. Heading</h6>*#
+        <p>
+            克维拉收银事业部是由无锡克维拉科技有限公司于2016年初成立，本部拥有研发，测试，大数据分析组。依托现有物联网建设大趋势将传统收银方式往云端，大数据方向发展。 克维拉收银系统就是结合线上和线下销售，统筹，分析为一体的综合性软件系统。
+        </p>
+    </div>
+</div>
+</body>
+<script src="/asset/wx/js/mui.min.js"></script>
+<script>
+    mui.init({
+        swipeBack:true //启用右滑关闭功能
+    });
+</script>
+</html>

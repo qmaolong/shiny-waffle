@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>券批次列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+
+        <div class="ibox-content">
+            <div class="row row-lg">
+
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <div id="toolbar" class="btn-group">
+                                #*<button type="button" class="btn btn-default add">
+                                    <i class="glyphicon glyphicon-plus"></i>&nbsp;新增券
+                                </button>
+                                <button type="button" class="btn btn-default" id="generateCoupons">
+                                    <i class="fa fa-newspaper-o"></i>&nbsp;批量生成
+                                </button>
+                                <button type="button" class="btn btn-default" id="importCoupons">
+                                    <i class="glyphicon glyphicon-import"></i>&nbsp;批量导入
+                                </button>
+                                <button type="button" class="btn btn-default edit">
+                                    <i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑
+                                </button>*#
+                                #*<button type="button" class="btn btn-default look">
+                                    <i class="glyphicon glyphicon-search"></i>&nbsp;查看
+                                </button>*#
+                                #*<button type="button" class="btn btn-default closeFrame">
+                                    <i class="glyphicon glyphicon-remove"></i>&nbsp;关闭
+                                </button>*#
+                            </div>
+                            <table id="table" data-height="700"
+                                   data-toggle="table"
+                                   data-striped="true"
+                                   data-query-params="queryParams"
+                                   data-pagination="true"
+                                   data-search="true"
+                                   data-show-refresh="true"
+                                   data-show-toggle="true"
+                                   data-show-columns="true"
+                                   data-page-list="[5, 10, 20, 50, 100, 200]"
+                                   data-page-size="15"
+                                   data-toolbar="#toolbar" data-mobile-responsive="true"
+                                   data-show-export="true"
+                                   data-export-data-type="all">
+                                <thead>
+                                <tr>
+##                                    <th data-field="state" data-checkbox="true"></th>
+##                                    <th data-formatter="Formatter.runningFormatter">序号</th>
+                                    <th data-field="id" data-sortable="true">批次号</th>
+                                    <th data-field="noLength" data-formatter="typeFormatter">方式</th>
+                                    <th data-field="cardTypeName" >类型</th>
+                                    <th data-field="count">数量</th>
+                                    <th data-field="createTime" data-formatter="Formatter.time">生成时间</th>
+                                    <th class="col-xs-1" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/plugins/layer/layer.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/jquery-ui-1.10.4.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/bootstrap-table-export.js?v=1"></script>
+<script src="$URL/asset/bk/js/tableExport.js"></script>
+#parse("common/foot.vm")
+<script type="text/javascript">
+    $("#table").bootstrapTable({
+        url: "$URL/merchant/admin/card/getCardBatches",
+        responseHandler : "responseHandler"
+    });
+
+    /*initEdit({
+        lookButton : ".look",
+        layerType : 2,
+        name : "批次查看",
+        content : "$URL/merchant/admin/coupon/batchDetail",
+        area : ['90%', '490px']
+    })*/
+
+    function actionFormatter(value, row, index){
+        var buttons = [];
+        buttons.push("<a class='btn btn-primary btn-xs disable-card' href='javascript:void(0)'>查看卡</a>");
+        return buttons.join('');
+    }
+    window.actionEvents = {
+        'click .disable-card': function (e, value, row, index) {//激活卡
+            layer.open({
+                title:"批量卡",
+                type: 2,
+                closeBtn: 1, //不显示关闭按钮
+                shift: 2,
+                maxmin: true,
+                area: ['90%', '85%'],
+                shadeClose: true, //开启遮罩关闭
+                content: '$URL/merchant/admin/card/batchCards?batchId=' + row.id,
+                end: function () {
+                    $("button[name='refresh']").click();
+                },
+                success : function(layero, index){
+                }
+            })
+        }
+    };
+
+    function typeFormatter(value){
+        return isNull(value)?"导入":"生成";
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/plugins/webuploader/webuploader.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="signupForm" method="post">
+                    <input type="hidden" name="id">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="col-sm-3 control-label">项名称：</label>
+                            <div class="col-sm-8">
+                                <input id="name" name="name" class="form-control" minlength="1" type="text" required >
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-sm-3 control-label">选择历史记录：</label>
+                            <div class="col-sm-8">
+                                <select  id="hisOptions" name="hisOptions" class="form-control" minlength="1" type="text">
+                                    <option value="">新增</option>
+                                    #foreach($option in $hisOptions)
+                                        <option value="$!{option.name}" hassubinfo="true">$!{option.name}</option>
+                                    #end
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="btn-group" style="float:right" id="exampleToolbar" role="group">
+                        <button type="button" id="addOption" class="btn btn-outline btn-default">
+                            <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" id="deleteOption" class="btn btn-outline btn-default">
+                            <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 可选项</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <table id="optionsTable" class="table" data-classes="table table-hover table-condensed" data-mobile-responsive="true" >
+                                <thead>
+                                <tr>
+                                    <th data-field="state" data-checkbox="true">
+                                    <th data-formatter="Formatter.runningFormatter">序号</th>
+                                    <th data-field="name">项名</th>
+                                    <th data-field="floatPrice">浮动价格</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group m-t-lg">
+                        <div class="col-sm-8 col-sm-offset-5">
+                            #if($oper!="look")
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            #end
+                            <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="option-content">
+    <div class="col-sm-11">
+        <div class="ibox-content">
+            <form class="form-horizontal m-t" id="optionsForm" method="post">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="col-sm-3 control-label">可选项名称：</label>
+                        <div class="col-sm-8">
+                            <input id="name" name="name" class="form-control" minlength="1" type="text" required >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="col-sm-3 control-label">浮动价格：</label>
+                        <div class="col-sm-8">
+                            <input id="floatPrice" name="floatPrice" class="form-control" minlength="1" type="text" value="0" required >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group m-t-lg">
+                    <div class="col-sm-8 col-sm-offset-5">
+                        <button class="btn btn-primary" type="submit">提交</button>
+                        <button class="btn btn-primary" type="button" id="closeLayer1">关闭</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="$URL/asset/bk/my-selector.js?v=fdd"></script>
+<script src="$URL/asset/bk/js/jquery-ui-1.10.4.min.js"></script>
+    #parse("common/foot.vm")
+<script>
+    $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})});
+
+    var combos = [];
+
+    if("add" != "$oper"){
+        var parentEditObj = jQuery.extend(true, {}, parent.Global.editObj);
+        if(!isNull(parentEditObj.options)){
+            combos = parentEditObj.options;
+        }
+        iniDataToForm(parentEditObj);
+    }
+
+    $("#optionsTable").bootstrapTable({
+        data : combos
+    })
+    //初始化可排序事件
+    $( "#optionsTable tbody" ).sortable();
+    $( "#optionsTable tbody" ).disableSelection();
+    $( "#optionsTable tbody" ).bind('sortupdate', function(event, ui) {
+        tableSortRefresh("#combosTable");
+    });
+
+    //可编辑
+    $("#optionsTable").on("click-cell.bs.table", function(field, value, row, ele, dom){
+        editableTable(field, value, row, ele, dom, "floatPrice");
+    })
+
+    //初始化表单
+    $("#signupForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("signupForm");
+        var options = $("#optionsTable").bootstrapTable("getData");
+        formData.options = options;
+        layer.load();
+        if("add" == "$oper"){
+            formData.id = generateIdFromCurrentArray(parent.$('#combosTable').bootstrapTable("getData"));
+            parent.$("#optionsTable").bootstrapTable("append", formData);
+        }else{
+            var parentData = parent.$('#optionsTable').bootstrapTable("getData");
+            jQuery.each(parentData, function(i, item){
+                if(item.id == formData.id){
+                    parentData[i] = formData;
+                }
+            })
+            parent.$('#optionsTable').bootstrapTable("load", parentData);
+        }
+        closeCurrentLayerPage();
+        layer.closeAll("loading");
+    }});
+
+    //新增可选项
+    $("#addOption").on("click", function(){
+        var index = layer.open({
+            title:'新增可选项',
+            type : 1,
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['560px', '320px'],
+            shadeClose: true, //开启遮罩关闭
+            content: $("#option-content").html(),
+            success : function(layero, index){
+                $("#optionsForm").validate({submitHandler: function() {
+                    var formData = getDataFromForm("optionsForm");
+                    formData.id = generateIdFromCurrentArray($("#optionsTable").bootstrapTable("getData"));
+                    $("#optionsTable").bootstrapTable("append", formData);
+                    layer.close(index);
+                }});
+                $("#closeLayer1").on("click", function(){
+                    layer.close(index);
+                })
+            }
+        });
+    })
+    //删除可选项
+    bindDeleteTr("#deleteOption", "#optionsTable", "name");
+
+    $("#hisOptions").on("change", function () {
+        var option = $(this).val();
+        if (isNull(option)){
+            $("input[name='name']").val("");
+            $("table").bootstrapTable("load", {
+                data : []
+            })
+        }
+        jQuery.each($hisOptions, function (i, item) {
+            if (option == item.name){
+                jQuery.each(item.options, function (i, itemOption) {
+                    if(itemOption.floatPrice==undefined){
+                        itemOption.floatPrice = 0;
+                    }
+                })
+                iniDataToForm(item);
+                $("table").bootstrapTable("load", {
+                    data : item.options
+                })
+            }
+        })
+    })
+
+</script>
+
+</body>
+</html>

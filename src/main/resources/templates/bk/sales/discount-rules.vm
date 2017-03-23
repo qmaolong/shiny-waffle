@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单位列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+
+        <div class="ibox-content">
+            <div class="row row-lg">
+
+                <div class="col-xs-12">
+                    <!-- Example Events -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <div id="toolbar" class="btn-group">
+                                <button type="button" class="btn btn-default add">
+                                    <i class="glyphicon glyphicon-plus"></i>&nbsp;新建
+                                </button>
+                                #*<button type="button" class="btn btn-default edit">
+                                    <i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑
+                                </button>
+                                <button type="button" class="btn btn-default delete">
+                                    <i class="glyphicon glyphicon-trash"></i>&nbsp;删除
+                                </button>
+                                <button type="button" class="btn btn-default look">
+                                    <i class="glyphicon glyphicon-search"></i>&nbsp;查看
+                                </button>*#
+                                <button type="button" class="btn btn-default" id="sort">
+                                    <i class="glyphicon glyphicon-search"></i>&nbsp;排序
+                                </button>
+                                #*<button type="button" class="btn btn-default closeFrame">
+                                    <i class="glyphicon glyphicon-remove"></i>&nbsp;关闭
+                                </button>*#
+                            </div>
+                            <table id="table" data-height="700"
+                                   data-toggle="table"
+                                   data-striped="true"
+                                   data-query-params="queryParams"
+                                   data-pagination="true"
+                                   data-search="true"
+                                   data-show-refresh="true"
+                                   data-show-toggle="true"
+                                   data-show-columns="true"
+                                   data-page-list="[5, 10, 20, 50, 100, 200]"
+                                   data-page-size="15"
+                                   data-toolbar="#toolbar" data-mobile-responsive="true"
+                                   data-show-export="true"
+                                   data-export-data-type="all">
+                                <thead>
+                                <tr>
+                                ##                                    <th data-field="state" data-checkbox="true"></th>
+                                    <th data-formatter="Formatter.runningFormatter">序号</th>
+                                    <th data-field="name">名称</th>
+                                    <th data-field="startTime" data-formatter="Formatter.date">开始时间</th>
+                                    <th data-field="endTime" data-formatter="Formatter.date">结束时间</th>
+                                    <th data-field="fitDaysCH">适用日</th>
+                                    <th data-field="minLine">消费满</th>
+                                    <th data-field="discountName">优惠</th>
+                                    <th data-formatter="rudFormatter" data-events="rudEvents">操作</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+<script type="text/html" id="edit-content">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="signupForm"  method="post">
+                        <input type="hidden" name="oper" value="$oper">
+                        <input type="hidden" name="id">
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label">名称：</label>
+                            <div class="col-xs-4">
+                                <input id="name" name="name" class="form-control" minlength="1" type="text" required>
+                            </div>
+                            <label class="col-xs-2 control-label">优惠类型：</label>
+                            <div class="col-xs-4">
+                                <div class="radio i-checks">
+                                    <label>
+                                        <input type="radio" value="1" name="discountType"  checked> <i></i> 折扣</label>
+                                    <label>
+                                        <input type="radio" value="2" name="discountType"> <i></i> 减免</label>
+                                ##                                <label>
+                                ##                                    <input type="radio" value="2" name="discountType"> <i></i> 减免</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label">起止日期：</label>
+                            <div class="col-xs-4">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <input name="startTime" data-type="date" class="form-control" type="text" >
+                                    <span class="input-group-addon">到</span>
+                                    <input id="abc" name="endTime" data-type="date" class="form-control" type="text" >
+                                </div>
+                            </div>
+                            <label class="col-xs-2 control-label">时间范围：</label>
+                            <div class="col-xs-4">
+                                <div class="input-daterange input-group" id="datepicker">
+                                    <div class="input-group clockpicker" data-autoclose="true">
+                                        <input type="text" class="form-control" name="dayOn" value="00:00">
+                                    </div>
+                                    <span class="input-group-addon">到</span>
+                                    <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                                        <input type="text" class="form-control" name="dayOff" value="23:59">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label">适用日：</label>
+
+                            <div class="col-xs-10">
+                                <label class="checkbox-inline i-checks">
+                                    <input type="checkbox" name="sun">星期日</label>
+                                <label class="checkbox-inline i-checks">
+                                    <input type="checkbox" name="mon" checked>星期一</label>
+                                <label class="checkbox-inline i-checks">
+                                    <input type="checkbox" name="tue" checked>星期二</label>
+                                <label class="checkbox-inline i-checks">
+                                    <input type="checkbox" name="wed" checked>星期三</label>
+                                <label class="checkbox-inline i-checks">
+                                    <input type="checkbox" name="thu" checked>星期四</label>
+                                <label class="checkbox-inline i-checks">
+                                    <input type="checkbox" name="fri" checked>星期五</label>
+                                <label class="checkbox-inline i-checks">
+                                    <input type="checkbox" name="sat">星期六</label>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group discount-type-1 discount-type-2">
+                            <label class="col-xs-2 control-label">满足金额：</label>
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="minLine" number="true" min="0" required value="$!{discountRule.minLine}"> <span class="input-group-addon">元</span>
+                                </div>
+                            </div>
+                            <label class="col-xs-1 control-label discount-type-1">折扣百分比：</label>
+                            <div class="col-xs-4 discount-type-1">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="percent" digits="true" range="[0,100]" required value="$!{discountRule.percent}"> <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                            <label class="col-xs-1 control-label discount-type-2 hidden">减免：</label>
+                            <div class="col-xs-4 discount-type-2 hidden">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="reduction" number="true" min="0" required value="$!{discountRule.reduction}"> <span class="input-group-addon">元</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-8 col-xs-offset-5" id="toolbar">
+                                <button class="btn btn-primary #if($oper == 'look')hidden#end" type="submit">提交</button>
+                                <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="sort-content">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="tabs-container">
+                    <div class="pull-right">
+                        <button class="btn btn-primary" type="submit" id="sortSubmit""><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;保存</button>
+                        <button class="btn btn-primary" type="button" id="closeLayer"><i class="glyphicon glyphicon-remove"></i>&nbsp;关闭</button>
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="active" id="tab-base"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 拖动排序</a>
+                        </li>
+                    </ul>
+                    <div class="col-xs-12">
+                        <div class="ibox-content">
+                            <table id="sortTable" class="table" data-classes="table table-hover table-condensed" data-mobile-responsive="true" >
+                                <thead>
+                                <tr>
+                                    <th data-formatter="Formatter.runningFormatter">序号</th>
+                                    <th data-field="name">名称</th>
+                                    <th data-field="startTime" data-formatter="Formatter.date">开始时间</th>
+                                    <th data-field="endTime" data-formatter="Formatter.date">结束时间</th>
+                                    <th data-field="fitDaysCH">适用日</th>
+                                    <th data-field="discountName">优惠</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</script>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/jquery-ui-1.10.4.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/clockpicker/clockpicker.js"></script>
+<script src="$URL/asset/bk/js/bootstrap-table-export.js?v=1"></script>
+<script src="$URL/asset/bk/js/tableExport.js"></script>
+#parse("common/foot.vm")
+<script type="text/javascript">
+    $("#table").bootstrapTable({
+        url: "$URL/merchant/admin/sales/getDescountRules",
+        responseHandler : "responseHandler"
+    });
+
+    //初始化增删改查配置
+    initEdit({
+        addButton : ".add",
+        editButton : ".edit",
+        deleteButton : ".delete",
+        lookButton : ".look",
+        editUrl : "$URL/merchant/admin/sales/editDiscountRule",
+        area : ['90%', '480px'],
+        afterInitEditContent : function(){
+            $(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})
+            formClickBind();
+            var parentEditObj = parent.Global.editObj
+            if(Global.editObj.discountType == 2){
+                $(".discount-type-1").addClass("hidden");
+                $(".discount-type-3").addClass("hidden");
+                $(".discount-type-2").removeClass("hidden");
+            }
+            $('.clockpicker').clockpicker({
+                afterShow : function(){
+                    $(".clockpicker-popover").css("z-index", "999999999");
+                }
+            });
+        },
+        afterInitAddContent : function(){
+            $(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})
+            formClickBind();
+            $('.clockpicker').clockpicker({
+                afterShow : function(){
+                    $(".clockpicker-popover").css("z-index", "999999999");
+                }
+            });
+        }
+    })
+
+    $("#sortTable").on("click", function(){
+
+    })
+
+    $("#sort").on("click", function(){
+        layer.open({
+            title:"优惠规则排序",
+            type: 1,
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['90%', '420px'],
+            shadeClose: true, //开启遮罩关闭
+            content: $("#sort-content").html(),
+            end: function () {
+                $("button[name='refresh']").click();
+            },
+            success : function(layero, index){
+                $("#closeLayer").on("click", function(){
+                    layer.close(index);
+                })
+                $("#sortTable").bootstrapTable({
+                    url: "$URL/merchant/admin/sales/getDescountRules"
+                });
+                //初始化可排序事件
+                $( "#sortTable tbody" ).sortable();
+                $( "#sortTable tbody" ).disableSelection();
+                $( "#sortTable tbody" ).bind('sortupdate', function(event, ui) {
+                    tableSortRefresh("#sortTable");
+                });
+
+                $("#sortSubmit").on("click", function(){
+                    var formData = $("#sortTable").bootstrapTable("getData");
+                    jQuery.ajax({
+                        url: '$URL/merchant/admin/sales/sortDiscountRules' ,
+                        type: 'POST',
+                        data: {dataStr : JSON.stringify(formData)},
+                        success: function (data) {
+                            if(data.resultCode == 'SUCCESS'){
+                                layer.msg("重新排序成功");
+                                layer.close(index);
+                            }else {
+                                layer.alert(data.errCodeDesc);
+                            }
+                        }
+                    });
+                })
+            }
+        })
+    })
+
+    function formClickBind(){
+        $("input[name='discountType']").on("ifChecked", function(){
+            var giftType = $(this).val();
+            if(giftType == 1){
+                $(".discount-type-2").addClass("hidden");
+                $(".discount-type-1").removeClass("hidden");
+            }else if(giftType == 2){
+                $(".discount-type-1").addClass("hidden");
+                $(".discount-type-2").removeClass("hidden");
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

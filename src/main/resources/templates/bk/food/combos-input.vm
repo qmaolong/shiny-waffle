@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/plugins/webuploader/webuploader.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="signupForm" method="post">
+                    <input type="hidden" name="id">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="col-sm-3 control-label">品项名称：</label>
+                            <div class="col-sm-8">
+                                <input id="name" name="name" class="form-control" minlength="1" type="text" required >
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-sm-3 control-label">是否必选：</label>
+                            <div class="col-sm-8">
+                                <label class="checkbox-inline i-checks">
+                                    <input type="checkbox" name="forceSelect" >必选</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="btn-group" style="float:right" id="exampleToolbar" role="group">
+                        <button type="button" id="addCombo" class="btn btn-outline btn-default">
+                            <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" id="deleteCombo" class="btn btn-outline btn-default">
+                            <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 可选菜品</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <table id="combosTable" class="table" data-classes="table table-hover table-condensed" data-mobile-responsive="true" >
+                                <thead>
+                                <tr>
+                                    <th data-field="state" data-checkbox="true">
+                                    <th data-formatter="Formatter.runningFormatter">序号</th>
+                                    <th data-field="id">ID</th>
+                                    <th data-field="name">菜名</th>
+                                    <th data-field="floatPrice">浮动价格</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group m-t-lg">
+                        <div class="col-sm-8 col-sm-offset-5">
+                            #if($oper!="look")
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            #end
+                            <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="$URL/asset/bk/my-selector.js?v=fdd"></script>
+<script src="$URL/asset/bk/js/jquery-ui-1.10.4.min.js"></script>
+    #parse("common/foot.vm")
+<script>
+    $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})});
+
+    var combos = [];
+
+    if("add" != "$oper"){
+        var parentEditObj = jQuery.extend(true, {}, parent.Global.editObj);
+        if(!isNull(parentEditObj.options)){
+            combos = parentEditObj.options;
+        }
+        iniDataToForm(parentEditObj, function(){
+            if(parentEditObj.type != 1){
+                $(".type-suite").addClass("hidden");
+            }
+        });
+    }
+
+    $("#combosTable").bootstrapTable({
+        data : combos
+    })
+    //初始化可排序事件
+    $( "#combosTable tbody" ).sortable();
+    $( "#combosTable tbody" ).disableSelection();
+    $( "#combosTable tbody" ).bind('sortupdate', function(event, ui) {
+        tableSortRefresh("#combosTable");
+    });
+
+    $("#addCombo").on("click", function(){
+        var index = layer.open({
+            title:'选择菜品',
+            type: 2,
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['90%', '90%'],
+            shadeClose: true, //开启遮罩关闭
+            content: '$URL/merchant/admin/food/chooseFood',
+            success : function(layero, index){
+
+            },
+            end : function(){
+                $("button[type='submit']").css("display", "");
+                $("form input").removeClass("disabled");
+                $("form select").removeClass("disabled");
+                $("form textarea").removeClass("disabled");
+            }
+        });
+    })
+
+    //可编辑
+    $("#combosTable").on("click-cell.bs.table", function(field, value, row, ele, dom){
+        editableTable(field, value, row, ele, dom, "floatPrice");
+    })
+
+    //初始化表单
+    $("#signupForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("signupForm");
+        var foods = $("#combosTable").bootstrapTable("getData");
+        formData.options = foods;
+        layer.load();
+        if("add" == "$oper"){
+            formData.id = generateIdFromCurrentArray(parent.$('#combosTable').bootstrapTable("getData"));
+            parent.$("#combosTable").bootstrapTable("append", formData);
+        }else{
+            var parentData = parent.$('#combosTable').bootstrapTable("getData");
+            jQuery.each(parentData, function(i, item){
+                if(item.id == formData.id){
+                    parentData[i] = formData;
+                }
+            })
+            parent.$('#combosTable').bootstrapTable("load", parentData);
+        }
+        closeCurrentLayerPage();
+        layer.closeAll("loading");
+    }});
+
+    bindDeleteTr("#deleteCombo", "#combosTable");
+
+</script>
+
+</body>
+</html>

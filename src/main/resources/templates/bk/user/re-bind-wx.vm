@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+       <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="col-sm-12">
+    <div class="ibox float-e-margins">
+            <div class="ibox-content profile-content col-sm-offset-3">
+                <img alt="image" class="" src="$!{qrcodeUrl}" style="width:60%;margin-left:18%">
+            </div>
+            <div class="ibox-content profile-content text-center">
+                <h4><strong>请用微信扫描二维码</strong></h4>
+            </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+    #parse("common/foot.vm")
+<script>
+$(function(){
+    var option = #if($!{userSession.openId})1#elseif(true)2#end;
+    var interval = setInterval(function(){
+        jQuery.ajax({
+            url : '$URL/merchant/admin/account/getRebindState?option=' + option,
+            type : "get",
+            success : function(res){
+                if(isNull(res)){
+                    return;
+                }
+                if(res.resultCode == 'SUCCESS'){
+                    layer.alert("操作成功！", function () {
+                        if(option==1){
+                            layer.closeAll("loading");
+                            closeCurrentLayerPage();
+                        }else {
+                            top.location.href = top.location.href;
+                        }
+                    });
+
+                }else {
+                    layer.alert(res.errCodeDesc);
+                    layer.closeAll("loading");
+                }
+            }
+        })
+    },1000)
+})
+</script>
+
+</body>
+</html>

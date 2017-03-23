@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <link href="css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="middle-box text-center animated fadeInDown">
+    <h1>SUCCESS</h1>
+    <h3 class="font-bold"></h3>
+
+    #*<div class="error-desc">
+        服务器好像出错了...
+        <br/>您可以返回主页看看
+        <br/><a href="index-2.html" class="btn btn-primary m-t">主页</a>
+    </div>*#
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+</body>
+<script type="text/html" id="content">
+    <div>test</div>
+</script>
+</html>

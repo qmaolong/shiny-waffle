@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/plugins/webuploader/webuploader.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="tabs-container">
+                <form class="form-horizontal" id="signupForm" method="post">
+                    <div class="ibox-content">
+                        <div class="form-group m-t-lg">
+                            <label class="col-xs-2 control-label">会员名：</label>
+                            <div class="col-xs-4">
+                                <input name="memberName" class="form-control" type="text" placeholder="非必填">
+                            </div>
+                            <label class="col-xs-2 control-label">性别：</label>
+                            <div class="col-xs-4">
+                                <div class="radio i-checks">
+                                    <label>
+                                        <input type="radio" value="" name="sex" checked> <i></i>所有</label>
+                                    <label>
+                                        <input type="radio" value="1" name="sex"> <i></i> 男</label>
+                                    <label>
+                                        <input type="radio" value="2" name="sex"> <i></i> 女</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label">手机号：</label>
+                            <div class="col-xs-4">
+                                <input name="tel" class="form-control"type="text" placeholder="非必填">
+                            </div>
+                            <label class="col-xs-2 control-label">生日：</label>
+                            <div class="col-xs-2">
+                                <select  id="birthMonth" name="birthMonth" class="form-control private-type" minlength="1" type="text">
+                                    <option value="">月</option>
+                                    <option value="1">1月</option>
+                                    <option value="2">2月</option>
+                                    <option value="3">3月</option>
+                                    <option value="4">4月</option>
+                                    <option value="5">5月</option>
+                                    <option value="6">6月</option>
+                                    <option value="7">7月</option>
+                                    <option value="8">8月</option>
+                                    <option value="9">9月</option>
+                                    <option value="10">10月</option>
+                                    <option value="11">11月</option>
+                                    <option value="12">12月</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-2">
+                                <select  id="birthDay" name="birthDay" class="form-control private-type" minlength="1" type="text">
+                                    <option value="">日</option>
+                                    <option value="1">1日</option>
+                                    <option value="2">2日</option>
+                                    <option value="3">3日</option>
+                                    <option value="4">4日</option>
+                                    <option value="5">5日</option>
+                                    <option value="6">6日</option>
+                                    <option value="7">7日</option>
+                                    <option value="8">8日</option>
+                                    <option value="9">9日</option>
+                                    <option value="10">10日</option>
+                                    <option value="11">11日</option>
+                                    <option value="12">12日</option>
+                                    <option value="13">13日</option>
+                                    <option value="14">14日</option>
+                                    <option value="15">15日</option>
+                                    <option value="16">16日</option>
+                                    <option value="17">17日</option>
+                                    <option value="18">18日</option>
+                                    <option value="19">19日</option>
+                                    <option value="20">20日</option>
+                                    <option value="21">21日</option>
+                                    <option value="22">22日</option>
+                                    <option value="23">23日</option>
+                                    <option value="24">24日</option>
+                                    <option value="25">25日</option>
+                                    <option value="26">26日</option>
+                                    <option value="27">27日</option>
+                                    <option value="28">28日</option>
+                                    <option value="29">29日</option>
+                                    <option value="30">30日</option>
+                                    <option value="31">31日</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label">会员编号：</label>
+                            <div class="col-xs-4">
+                                <input name="tagId" class="form-control" minlength="1" type="text" placeholder="非必填">
+                            </div>
+                            <label class="col-xs-2 control-label">会员类型：</label>
+                            <div class="col-xs-4">
+                                <select  id="cardTypeId" name="cardTypeId" class="form-control private-type" minlength="1" type="text">
+                                    <option value="">所有</option>
+                                    #foreach($cardType in $!cardTypes)
+                                        <option value="$!{cardType.objectIdStr}" class="private-type">$!{cardType.name}</option>
+                                    #end
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="btn-group" style="float:right" id="exampleToolbar" role="group">
+                            <button type="button" id="addCouponType" class="btn btn-outline btn-default">
+                                <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="deleteCouponType" class="btn btn-outline btn-default">
+                                <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">选择券类型</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <table id="couponTypeTable" class="table" data-classes="table table-hover table-condensed" data-mobile-responsive="true" >
+                                    <thead>
+                                    <tr>
+                                        <th data-field="couponTypeName">券类型</th>
+                                        <th data-field="count">发放张数</th>
+                                        <th data-field="expired">过期时间</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group toolbar">
+                            <div class="col-xs-7 col-xs-offset-4 m-t-lg">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                                <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                                <button class="btn btn-primary" type="button" id="preview">查看符合条件的会员</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="coupon-content">
+    <div class="col-sm-11">
+        <div class="ibox-content">
+            <form class="form-horizontal m-t" id="couponsForm" method="post">
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">券类型：</label>
+                    <div class="col-xs-8">
+                        <select  id="couponTypeId" name="couponTypeId" class="form-control private-type" minlength="1" type="text" required>
+                            #foreach($couponType in $!couponTypes)
+                                <option value="$!{couponType.objectIdStr}" class="private-type">$!{couponType.name}</option>
+                            #end
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">发放张数：</label>
+                    <div class="col-sm-8">
+                        <input id="count" name="count" class="form-control" minlength="1" range="[1,5]" type="text" value="1" required >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">过期时间：</label>
+                    <div class="col-sm-8">
+                        <input id="expired" name="expired" data-type="date" class="form-control" minlength="1" type="text" >
+                    </div>
+                </div>
+                <div class="form-group m-t-lg">
+                    <div class="col-sm-8 col-sm-offset-5">
+                        <button class="btn btn-primary" type="submit">提交</button>
+                        <button class="btn btn-primary" type="button" id="closeLayer1">关闭</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="preview-content">
+    <div class="col-sm-12">
+        <!-- Example Events -->
+        <div class="example-wrap">
+            <div class="example">
+                <table id="table" data-height="400"
+                       data-toggle="table"
+                       data-striped="true"
+                       data-query-params="queryParams"
+                       data-pagination="true"
+                       data-page-list="[5, 10, 20, 50, 100, 200]"
+                       data-page-size="10"
+                       data-toolbar="#toolbar" data-mobile-responsive="true">
+                    <thead>
+                    <tr>
+                        <th data-field="tagId" data-sortable="true">编号</th>
+                        <th data-field="objectIdStr" data-visible="false">卡号</th>
+                        <th data-field="memberName">会员名</th>
+                        <th data-field="sex" data-formatter="Formatter.sex">性别</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <!-- End Example Events -->
+    </div>
+</script>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+#parse("common/foot.vm")
+<script>
+    $(document).ready(function () {
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+    });
+
+    $("table").bootstrapTable({
+        data : []
+    })
+
+    //初始化表单
+    $("#signupForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("signupForm");
+        var couponTypes = $("#couponTypeTable").bootstrapTable("getData");
+        if (isNull(couponTypes) || couponTypes.length==0){
+            layer.msg("请选择要发放的券类型！");
+            return;
+        }
+        layer.load();
+        jQuery.ajax({
+            url : "$URL/merchant/admin/card/sendCoupon2CardSubmit",
+            data : {dataStr : JSON.stringify(formData), couponTypesStr : JSON.stringify(couponTypes)},
+            type : "post",
+            success : function(res){
+                if(res.resultCode == 'SUCCESS'){
+                    layer.alert("成功发放券给" + res.result + "个微会员", {
+                        skin: 'layui-layer-lan'
+                        ,closeBtn: 0
+                        ,shift: 4 //动画类型
+                    },function(){
+                        closeCurrentLayerPage();
+                        layer.closeAll("dialog");
+                    });
+                }else {
+                    layer.alert(res.errCodeDesc);
+                    layer.closeAll("loading");
+                }
+            }
+        })
+    }});
+
+    //新增可选项
+    $("#addCouponType").on("click", function(){
+        var index = layer.open({
+            title:'新增可选项',
+            type : 1,
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['90%', '320px'],
+            shadeClose: true, //开启遮罩关闭
+            content: $("#coupon-content").html(),
+            success : function(layero, index){
+                $("input[data-type='date']").on("click", function () {
+                    laydate({istime: false, format: 'YYYY-MM-DD', fixed : true})
+                });
+                $("#couponsForm").validate({submitHandler: function() {
+                    var formData = getDataFromForm("couponsForm");
+                    formData.id = generateIdFromCurrentArray($("#couponTypeTable").bootstrapTable("getData"));
+                    formData.couponTypeName = $("select[name='couponTypeId']").find("option:selected").text();
+                    $("#couponTypeTable").bootstrapTable("append", formData);
+                    layer.close(index);
+                }});
+                $("#closeLayer1").on("click", function(){
+                    layer.close(index);
+                })
+            }
+        });
+    })
+    //删除可选项
+    bindDeleteTr("#deleteCouponType", "#couponTypeTable", "id");
+
+    $("#preview").on("click", function () {
+        var formData = getDataFromForm("signupForm");
+        jQuery.ajax({
+            url : "$URL/merchant/admin/card/getWeixinMembers",
+            data : {dataStr : JSON.stringify(formData)},
+            type : "post",
+            success : function(res){
+                var index = layer.open({
+                    title:'查看匹配的微会员',
+                    type : 1,
+                    closeBtn: 1, //不显示关闭按钮
+                    shift: 2,
+                    maxmin: true,
+                    area: ['90%', '90%'],
+                    shadeClose: true, //开启遮罩关闭
+                    content: $("#preview-content").html(),
+                    success : function(layero, index){
+                        $("#table").bootstrapTable({
+                            data : res
+                        })
+                    }
+                });
+            }
+        })
+    })
+
+</script>
+
+</body>
+</html>

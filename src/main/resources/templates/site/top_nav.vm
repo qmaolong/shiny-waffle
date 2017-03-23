@@ -1,0 +1,27 @@
+<div class="header-main">
+    <div class="logo">
+        <h1><span class="books"></span> <a href="/" style="font-family:'黑体';font-size:30px">克维拉收银系统</a></h1>
+    </div>
+    <div class="top-nav">
+        <span class="menu"> <img src="/asset/site/images/icon.png" alt=""></span>
+        <nav class="cl-effect-21" id="cl-effect-21">
+            <ul class="res">
+                <li><a href="/" class="active">首页</a></li>
+                <li><a href="/product">产品</a></li>
+                <li><a href="/about">关于我们</a></li>
+                <li><a href="/contact">联系我们</a></li>
+                <li><a href="/merchant/login" target="_blank">注册|登录</a></li>
+            </ul>
+        </nav>
+        <!-- script-for-menu -->
+        <script>
+            $( "span.menu" ).click(function() {
+                $( "ul.res" ).slideToggle( 300, function() {
+                    // Animation complete.
+                });
+            });
+        </script>
+        <!-- /script-for-menu -->
+    </div>
+    <div class="clearfix"> </div>
+</div>

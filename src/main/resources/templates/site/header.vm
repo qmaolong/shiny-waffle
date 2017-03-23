@@ -1,0 +1,13 @@
+<title>克维拉收银系统-$title</title>
+<link href="/asset/site/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- Custom Theme files -->
+<link href="/asset/site/css/style.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="/asset/site/css/style1.css" rel="stylesheet" type="text/css" media="all" />
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="收银，收银系统，克维拉科技，无锡克维拉科技" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<script src="/asset/site/js/jquery-1.11.0.min.js"></script>
+<link rel="stylesheet" href="/asset/site/css/flexslider.css" type="text/css" media="screen" />

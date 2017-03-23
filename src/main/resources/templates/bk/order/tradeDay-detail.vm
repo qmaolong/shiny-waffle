@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="wrapper wrapper-content animated fadeInUp">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="m-b-md">
+                                <a href="project_detail.html#" class="btn btn-white btn-xs pull-right"></a>
+                                <h2>班号：$!{tradeDay.id}</h2>
+                            </div>
+                            <dl class="dl-horizontal">
+                                <dt>员工：</dt>
+                                <dd><span class="label label-primary">${tradeDay.userName}</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <dl class="dl-horizontal">
+                                <dt class="m-b-sm">开始时间：</dt>
+                                <dd>$dateUtil.formateDateToStr($!{tradeDay.startTime}, 'yyyy-MM-dd hh:mm:ss')</dd>
+                                <dt class="m-b-sm">结束时间：</dt>
+                                <dd>$dateUtil.formateDateToStr($!{tradeDay.startTime}, 'yyyy-MM-dd hh:mm:ss')</dd>
+                                <dt class="m-b-sm">开班现金余额：</dt>
+                                <dd>$!{tradeDay.amount1}</dd>
+                                <dt class="m-b-sm">收班现金余额：</dt>
+                                <dd>$!{tradeDay.amount2}
+                                </dd>
+                                <dt class="m-b-sm">所收现金款：</dt>
+                                <dd>$!{tradeDay.cashAmount}
+                                </dd>
+                                <dt class="m-b-sm">找零现金款：</dt>
+                                <dd>$!{tradeDay.changeAmount}
+                                </dd>
+                                <dt class="m-b-sm">刷卡金额：</dt>
+                                <dd>$!{tradeDay.bankAmount}
+                                </dd>
+                                <dt class="m-b-sm">会员卡消费：</dt>
+                                <dd>$!{tradeDay.cardAmount}
+                                </dd>
+                                <dt class="m-b-sm">总金额：</dt>
+                                <dd>$!{tradeDay.totalAmount}
+                                </dd>
+                                <dt class="m-b-sm">实际金额：</dt>
+                                <dd>$!{tradeDay.actualAmount}
+                                </dd>
+                            </dl>
+
+                        </div>
+                        <div class="col-sm-7" id="cluster_info">
+                            <dl class="dl-horizontal">
+
+                                <dt class="m-b-sm">刷卡支付：</dt>
+                                <dd>$!{tradeDay.bankAmount}</dd>
+                                <dt class="m-b-sm">会员卡支付：</dt>
+                                <dd>$!{tradeDay.cardAmount}</dd>
+                                <dt class="m-b-sm">其他收入：</dt>
+                                <dd>$!{tradeDay.otherIncomeAmount}</dd>
+                                <dt class="m-b-sm">其他支出：</dt>
+                                <dd>
+                                    $!{tradeDay.otherOutcomeAmount}
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                #*<div class="row">
+                    <div class="col-sm-12">
+                        <dl class="dl-horizontal">
+                            <dt>当前进度</dt>
+                            <dd>
+                                <div class="progress progress-striped active m-b-sm">
+                                    <div style="width: 60%;" class="progress-bar"></div>
+                                </div>
+                                <small>当前已完成项目总进度的 <strong>60%</strong></small>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>*#
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/content.min.js?v=1.0.0"></script>
+<script>
+    $(document).ready(function(){$("#loading-example-btn").click(function(){btn=$(this);simpleLoad(btn,true);simpleLoad(btn,false)})});function simpleLoad(btn,state){if(state){btn.children().addClass("fa-spin");btn.contents().last().replaceWith(" Loading")}else{setTimeout(function(){btn.children().removeClass("fa-spin");btn.contents().last().replaceWith(" Refresh")},2000)}};
+</script>
+
+</body>
+</html>

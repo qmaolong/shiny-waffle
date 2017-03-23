@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #set($title = "关于我们")
+#parse("site/header.vm")
+    <link type="text/css" rel="stylesheet" href="/asset/site/css/colorfulTab.min.css">
+</head>
+<body>
+
+<div class="banner1 agileits">
+    <div class="header">
+        <div class="container">
+#parse("site/top_nav.vm")
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/asset/site/js/colorfulTab.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $("#colorful").colorfulTab();
+
+        $("#colorful-elliptic").colorfulTab({
+            theme: "elliptic"
+        });
+
+        $("#colorful-flatline").colorfulTab({
+            theme: "flatline"
+        });
+
+        $("#colorful-background-image").colorfulTab({
+            theme: "flatline",
+            backgroundImage: "true",
+            overlayColor: "#002F68",
+            overlayOpacity: "0.8"
+        });
+
+    });
+</script>
+<div class="about">
+    <div class="container">
+        <div class="about-main">
+            <div class="about-top">
+                <h2>关于我们</h2>
+            </div>
+            <div class="about-bottom">
+                <div class="col-md-6 about-bott-left">
+                    <img src="/asset/site/images/ab.jpg" alt="" class="img-responsive">
+                </div>
+                <div class="col-md-6 about-bott-right">
+                    <!-- Elliptic -->
+                    <div class="colorful-tab-wrapper" id="colorful-elliptic">
+                        <ul class="colorful-tab-menu">
+                            <li class="colorful-tab-menu-item active" tab-color="#C9003C"><a href="#elp-0">简介</a></li>
+                            <li class="colorful-tab-menu-item" tab-color="#00A566"><a href="#elp-1">功能</a></li>
+                            <li class="colorful-tab-menu-item" tab-color="#8021D3"><a href="#elp-2">未来</a></li>
+                        </ul>
+                        <div class="colorful-tab-container">
+                            <div class="colorful-tab-content active" id="elp-0">
+                                <p>克维拉收银事业部是由无锡克维拉科技有限公司于2016年初成立，本部拥有研发，测试，大数据分析组。依托现有物联网建设大趋势将传统收银方式往云端，大数据方向发展。
+                                    克维拉收银系统就是结合线上和线下销售，统筹，分析为一体的综合性软件系统。</p>
+                            </div>
+                            <div class="colorful-tab-content" id="elp-1">
+                                <ul>
+                                    <li>支持传统收银所需各种功能</li>
+                                    <li>离线，在线均可使用</li>
+                                    <li>支持多种支付方式</li>
+                                    <li>支持数据云端存储</li>
+                                    <li>支持销售趋势分析，为商家做出更好的销售决策</li>
+                                </ul>
+                            </div>
+                            <div class="colorful-tab-content" id="elp-2">
+                                <ul>
+                                    <li>打造硬件软件一体化</li>
+                                    <li>不断完善销售统计分析</li>
+                                    <li>不断跟踪客户的需求，不断完善和发展自身软件系统</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Elliptic -->
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--about end here-->
+<!--about layer1-->
+<div class="about-layer1">
+    <div class="container">
+        <div class="about-agile">
+            <h4></h4>
+            <p></p>
+            <p> </p>
+        </div>
+    </div>
+</div>
+<!--about layer1-->
+<!--team start here-->
+#*
+<div class="team">
+    <div class="container">
+        <div class="team-main">
+            <div class="team-top">
+                <h3>Our Staff</h3>
+            </div>
+            <div class="team-bottom">
+                <div class="col-md-3 agileinfo">
+                    <!-- normal -->
+                    <div class="ih-item circle effect13 bottom_to_top"><a href="#">
+                        <div class="img"><img src="/asset/site/images/t1.jpg" alt="img"></div>
+                        <div class="info">
+                            <div class="info-back">
+                                <h3>Smith</h3>
+                                <p>Description goes here</p>
+
+
+                            </div>
+                        </div></a></div>
+                    <!-- end normal -->
+                    <div class="team-icons">
+                        <ul>
+                            <li><a href="#" class="fa"> </a></li>
+                            <li><a href="#" class="tw"> </a></li>
+                            <li><a href="#" class="g"> </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 agileinfo">
+                    <!-- normal -->
+                    <div class="ih-item circle effect13 bottom_to_top"><a href="#">
+                        <div class="img"><img src="/asset/site/images/t2.jpg" alt="img"></div>
+                        <div class="info">
+                            <div class="info-back">
+                                <h3>Daneal</h3>
+                                <p>Description goes here</p>
+                            </div>
+                        </div></a></div>
+                    <!-- end normal -->
+                    <div class="team-icons">
+                        <ul>
+                            <li><a href="#" class="fa"> </a></li>
+                            <li><a href="#" class="tw"> </a></li>
+                            <li><a href="#" class="g"> </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 agileinfo">
+                    <!-- normal -->
+                    <div class="ih-item circle effect13 bottom_to_top"><a href="#">
+                        <div class="img"><img src="/asset/site/images/t3.jpg" alt="img"></div>
+                        <div class="info">
+                            <div class="info-back">
+                                <h3>Mac</h3>
+                                <p>Description goes here</p>
+                            </div>
+                        </div></a></div>
+                    <!-- end normal -->
+                    <div class="team-icons">
+                        <ul>
+                            <li><a href="#" class="fa"> </a></li>
+                            <li><a href="#" class="tw"> </a></li>
+                            <li><a href="#" class="g"> </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 agileinfo">
+                    <!-- normal -->
+                    <div class="ih-item circle effect13 bottom_to_top"><a href="#">
+                        <div class="img"><img src="/asset/site/images/t4.jpg" alt="img"></div>
+                        <div class="info">
+                            <div class="info-back">
+                                <h3>John</h3>
+                                <p>Description goes here</p>
+                            </div>
+                        </div></a></div>
+                    <!-- end normal -->
+                    <div class="team-icons">
+                        <ul>
+                            <li><a href="#" class="fa"> </a></li>
+                            <li><a href="#" class="tw"> </a></li>
+                            <li><a href="#" class="g"> </a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <!-- end Bottom to top -->
+        </div>
+    </div>
+</div>
+*#
+    #parse("site/footer.vm")
+</body>
+</html>

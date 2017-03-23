@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #set($title = "产品介绍")
+#parse("site/header.vm")
+</head>
+<body>
+<div class="banner1 agileits">
+    <div class="header">
+        <div class="container">
+            #parse("site/top_nav.vm")
+        </div>
+    </div>
+</div>
+<div class="gallery">
+    <div class="container">
+        <div class="gallery-main">
+            <div class="gallery-top">
+                <h2>克维拉收银系统</h2>
+                <p>克维拉收银软件以云系统为依托，实现传统收银的转型，让用户能够更加轻松完成收银业务。</p>
+            </div>
+            <div class="gallery-bottom">
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a href="/asset/site/images/p_login.jpg"
+                                                                                 data-lightbox-gallery="gallery1"
+                                                                                 id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_login.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>登录界面</h3>
+                                    <p>用户输入在云端设置的用户名密码即可登陆</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a href="/asset/site/images/p_desk.jpg"
+                                                                                 data-lightbox-gallery="gallery1"
+                                                                                 id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_desk.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>桌台管理</h3>
+                                    <p>管理桌台，可以按区域，类别，状态区分</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a href="/asset/site/images/p_order.jpg"
+                                                                                 data-lightbox-gallery="gallery1"
+                                                                                 id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_order.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>点菜界面</h3>
+                                    <p>各种简单实用的点菜功能</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a
+                                    href="/asset/site/images/p_desk_select.jpg" data-lightbox-gallery="gallery1"
+                                    id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_desk_select.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>桌台选择</h3>
+                                    <p>按照不同功能选择相关桌台</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a href="/asset/site/images/p_pay.jpg"
+                                                                                 data-lightbox-gallery="gallery1"
+                                                                                 id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_pay.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>结算</h3>
+                                    <p>支持现金，银行卡，支付宝，微信及其它第三方支付方式</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a href="/asset/site/images/p_member.jpg"
+                                                                                 data-lightbox-gallery="gallery1"
+                                                                                 id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_member.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>会员充值</h3>
+                                    <p>会员充值</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a
+                                    href="/asset/site/images/p_open_desk.jpg" data-lightbox-gallery="gallery1"
+                                    id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_open_desk.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>开台</h3>
+                                    <p>填入可选信息开台</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a
+                                    href="/asset/site/images/p_customer.jpg" data-lightbox-gallery="gallery1"
+                                    id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_customer.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>客屏显示</h3>
+                                    <p>详细直观的客屏显示</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a href="/asset/site/images/p_toolbox.jpg"
+                                                                                 data-lightbox-gallery="gallery1"
+                                                                                 id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_toolbox.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>工具箱</h3>
+                                    <p>各种相关设置个命令</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a
+                                    href="/asset/site/images/p_admin1.jpg" data-lightbox-gallery="gallery1"
+                                    id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_admin1.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>管理界面</h3>
+                                    <p>信息1</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a
+                                    href="/asset/site/images/p_admin2.jpg" data-lightbox-gallery="gallery1"
+                                    id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_admin2.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>管理界面</h3>
+                                    <p>信息2</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 gallery-grid">
+                    <div class="gallery-grid-effects">
+                        <div id="nivo-lightbox-demo">
+                            <div class="ih-item square effect4 bottom_to_top"><a href="/asset/site/images/p_menu.jpg"
+                                                                                 data-lightbox-gallery="gallery1"
+                                                                                 id="nivo-lightbox-demo">
+                                <div class="img"><img src="/asset/site/images/p_menu.jpg" alt="img"></div>
+                                <div class="mask1"></div>
+                                <div class="mask2"></div>
+                                <div class="info">
+                                    <h3>管理菜单</h3>
+                                    <p>详细的管理菜单，趋势分析</p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="/asset/site/css/magnific-popup.css">
+<script type="text/javascript" src="/asset/site/js/nivo-lightbox.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#nivo-lightbox-demo a').nivoLightbox({effect: 'fade'});
+    });
+</script>
+
+<div class="gallery">
+    <div class="container">
+        <div class="about-arch">
+        </div>
+    </div>
+</div>
+    #parse("site/footer.vm")
+</body>
+</html>

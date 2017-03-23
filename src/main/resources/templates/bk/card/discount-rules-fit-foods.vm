@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/jsTree/style.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="min-height: 542px;">
+                    <div id="jstree1">
+                        <ul>
+                            <li class="jstree-open" data-jstree='{"type":"top"}'>分类
+                                <input type="hidden" id="childrenId" value="$!{categories.get(0).children.get(0).id}">
+                                <ul>
+                                    #foreach($category in $!{categories})
+                                        #set($firstCount = $velocityCount)
+                                        <li  class="#if($velocityCount == 1)jstree-open#end" data-jstree='{"type":"second"}'>
+                                            $!{category.id}-$!{category.name}
+                                            <ul>
+                                                #foreach($child in ${category.children})
+                                                    <li data-jstree='{"type":"third"}'class="#if($velocityCount == 1&&$firstCount == 1)jstree-clicked#end " onclick="javascript:chooseChildren('$!{child.id}')">$!{child.id}-$!{child.name}</li>
+                                                #end
+                                            </ul>
+
+                                        </li>
+                                    #end
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <table id="notSelectedTable" class="table" data-classes="table table-hover table-condensed"  data-striped="true" data-height="505"
+                           data-pagination="true"
+                           data-search="true"
+                           data-page-size="10">
+                        <thead>
+                        <tr>
+                            <th data-field="state" data-checkbox="true">
+                            <th data-field="id">id</th>
+                            <th data-field="name">名称</th>
+                            <th data-field="price1">价格</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1">
+            <br/><br/><br/><br/><br/><br/>
+            <button type="button" id="keepRenderingSort_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button><br/>
+            <button type="button" id="keepRenderingSort_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button><br/><br/><br/>
+            <button type="button" id="keepRenderingSort_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button><br/>
+            <button type="button" id="keepRenderingSort_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <table id="selectedTable" class="table" data-classes="table table-hover table-condensed"  data-striped="true" data-height="505"
+                           data-pagination="true"
+                           data-search="true"
+                           data-page-size="10">
+                        <thead>
+                        <tr>
+                            <th data-field="state" data-checkbox="true">
+                            <th data-field="id">id</th>
+                            <th data-field="name">名称</th>
+                            <th data-field="price1">价格</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/jsTree/jstree.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/my-selector.js"></script>
+#parse("common/foot.vm")
+<script>
+    $("#jstree1").jstree({
+        "core": {"check_callback": true},
+        "plugins": ["types", "dnd"],
+        "types": {
+            "default": {"icon": "fa fa-tag"},
+            "top": {"icon": "glyphicon glyphicon-menu-hamburger"},
+            "second" : {"icon": "glyphicon glyphicon-stop"},
+            "third" : {"icon": "glyphicon glyphicon-triangle-right"}
+        }
+    });
+
+    $(function () {
+        //初始化控件
+        MySelector.init({
+            refreshUnselectedTable : function(){
+                var childrenId = $("#childrenId").val();
+                jQuery.ajax({
+                    url: "$URL/merchant/admin/food/getFoodList?cateChildrenId=" + childrenId,
+                    type: "get",
+                    async : false,
+                    success : function(res){
+                        MySelector.tableData1 = MySelector.filterData1ExitInData2(res, MySelector.getTableData2());
+                        $("#notSelectedTable").bootstrapTable('load', {data: MySelector.tableData1});
+                    }
+                });
+            }
+        })
+
+        $("#notSelectedTable").bootstrapTable({data: MySelector.tableData1});//初始化数据表1
+        MySelector.refreshUnselectedTable();
+        $('#selectedTable').bootstrapTable({
+            data: MySelector.tableData2
+        });
+    });
+
+    function chooseChildren(childrenId){
+        $('#childrenId').val(childrenId);
+        MySelector.refreshUnselectedTable();
+    }
+</script>
+
+</body>
+</html>

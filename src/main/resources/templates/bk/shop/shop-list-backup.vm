@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>门店列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+
+    <!-- jqgrid-->
+    <link href="$URL/asset/bk/css/plugins/jqgrid/ui.jqgridffe4.css?0820" rel="stylesheet">
+
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+
+    <style>
+        /* Additional style to fix warning dialog position */
+
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox ">
+                <div class="ibox-content">
+                    <div class="jqGrid_wrapper">
+                        <table id="table_list_2"></table>
+                        <div id="pager_list_2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+##<script src="$URL/asset/bk/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/jqgrid/i18n/grid.locale-cnffe4.js?0820"></script>
+<script src="$URL/asset/bk/js/plugins/jqgrid/jquery.jqGrid.minffe4.js?0820"></script>
+<script src="$URL/asset/bk/js/content.min.js?v=1.0.0"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script>
+    $(document).ready(function () {
+        jQuery.jgrid.defaults.styleUI = "Bootstrap";
+        $("#table_list_2").jqGrid({
+            url : "$URL/merchant/admin/shop/getShopList",
+            datatype: "json",
+            height: 450,
+            autowidth: true,
+            shrinkToFit: true,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            multiselect: false,
+            colNames: ["序号", "名称", "类型", "地址", "期限", "authKey"],
+            colModel: [{
+                name: "id",
+                index: "id",
+                editable: false,
+                width: 30,
+                search: true,
+                sorttype: "int",
+                formatter: "int",
+                editrules:{number:true}
+            }, {
+                name: "name",
+                index: "name",
+                editable: true,
+                width: 60,
+                sorttype: "string",
+                formatter: "string"
+            },{
+                name: "superFlag",
+                index: "superFlag",
+                editable: true,
+                width: 30,
+                edittype:"select",
+                editoptions:{value:"true:总店;false:分店"},
+                align: "center",
+                sorttype: "string",
+                formatter: function(superFlag){if(superFlag == 1)return '总店';else return '分店';}
+            },{
+                name: "address",
+                index: "address",
+                editable: true,
+                width: 80,
+                align: "center",
+                sorttype: "string",
+                formatter: "string"
+            }, {
+                name: "expired",
+                index: "expired",
+                editable: false,
+                width: 60,
+                align: "center",
+                sorttype: "date",
+                editrules:{required:true},
+                formatter: function(expired){if(null==expired)return "未开通";var result=new Date();result.setTime(expired);return result.toLocaleDateString();},
+                editoptions:{
+                    dataInit:function(el){
+                        $(el).click(function(){
+                            $("#expired").on("click", function(){laydate({istime: false, format: 'YYYY-MM-DD'})});
+                            laydate({istime: true, format: 'YYYY-MM-DD'});
+                        });
+                    }
+                },editrules:{edithidden:true,required:true,date:true}
+        }, {
+                name: "authKey",
+                index: "authKey",
+                editable: true,
+                width: 120,
+                align: "center",
+                sorttype: "string"
+            }],
+            pager: "#pager_list_2",
+//            viewrecords: true,
+            caption: "门店列表",
+            add: true,
+            edit: true,
+            addtext: "Add",
+            edittext: "Edit",
+            hidegrid: false,
+            editurl:"$URL/merchant/admin/shop/editShop"
+        });
+//        $("#table_list_2").setSelection(4, true);
+        $("#table_list_2").jqGrid("navGrid", "#pager_list_2", {
+            edit: true,
+            add: true,
+            del: true,
+            search: true
+        }, {
+            height:280,
+            reloadAfterSubmit: true,
+//            afterSubmit : function(data){alert(JSON.stringify(data))},
+            closeAfterEdit:true,
+            bSubmit:"提交"
+        },{
+            height:280,
+            reloadAfterSubmit:true,
+            bSubmit:"提交",
+            closeAfterAdd:true
+        },{
+            reloadAfterSubmit:true
+        });
+
+        /*$(window).bind("resize", function () {
+            var width = $(".jqGrid_wrapper").width();
+            $("#table_list_2").setGridWidth(width)
+        })*/
+    });
+</script>
+</body>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/table_jqgrid.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:02 GMT -->
+</html>

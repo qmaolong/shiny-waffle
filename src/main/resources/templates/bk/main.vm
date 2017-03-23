@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>后台管理</title>
+
+    <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <style>
+        body {
+            font-family : "黑体"
+        }
+        @font-face {
+            font-family: 'iconfont';
+            src: url('//at.alicdn.com/t/font_1476068139_040614.eot'); /* IE9*/
+            src: url('//at.alicdn.com/t/font_1476068139_040614.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+            url('//at.alicdn.com/t/font_1476068139_040614.woff') format('woff'), /* chrome、firefox */
+            url('//at.alicdn.com/t/font_1476068139_040614.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+            url('//at.alicdn.com/t/font_1476068139_040614.svg#iconfont') format('svg'); /* iOS 4.1- */
+        }
+
+        .iconfont{font-family:"iconfont";
+            font-size:16px;font-style:normal;}
+    </style>
+</head>
+
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+<div id="wrapper">
+    <!--左侧导航开始-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="nav-close"><i class="fa fa-times-circle"></i>
+        </div>
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element text-center">
+                        <span><img alt="image" class="img-circle" style="width:64px;height:64px" src="${user.headImgUrl}" onerror="this.onerror=null;this.src='$URL/asset/bk/img/default-user.jpg'"/></span>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                <span class="block m-t-xs"><strong class="font-bold">#if($!{user.name})$!{user.name}#else$!{user.nickName}#end</strong></span>
+                                    <span class="text-muted text-xs block">$toolUtil.getRoleNameByCode($!{user.role})</span>
+                                ##                                <span class="text-muted text-xs block"></span>
+                                </span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            #foreach($shop in $shopList)
+                                <li><a href="$URL/merchant/changeShop?shopId=$!{shop.id}">$!{shop.name}</a>
+                                </li>
+                            #end
+                        </ul>
+                    </div>
+                    <div class="logo-element">
+                    </div>
+                </li>
+                <li>
+                    <a class="" href="$URL/merchant/admin/order/charts" target="iframe0">
+                        <i class="glyphicon glyphicon-home m-r-sm"></i>
+                        <span class="nav-label">主页</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="J_menuItem">
+                        <i class="fa fa-institution"></i>
+                        <span class="nav-label">门店信息</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="" href="$URL/merchant/admin/shop/shopList" target="iframe0">门店列表</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/shop/deskCat" target="iframe0">桌型管理</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/shop/rooms" target="iframe0">区域管理</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/shop/desks" target="iframe0">桌位管理</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/shop/cashiers" target="iframe0">收银台管理</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="glyphicon glyphicon-cutlery"></i>
+                        <span class="nav-label">菜品管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="" href="$URL/merchant/admin/unit/unit" target="iframe0">单位信息</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/category/categories" target="iframe0">品项大类</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/category/cateChildren" target="iframe0">品项小类</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/taste/tastes" target="iframe0">口味</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/food/foodList" target="iframe0">菜品管理</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="glyphicon glyphicon-random"></i>
+                        <span class="nav-label">运营管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="" href="$URL/merchant/admin/sales/discountRules" target="iframe0">折扣管理</a>
+                        </li>
+                        #*<li>
+                            <a class="J_menuItem" href="$URL/merchant/admin/sales/specialFoods">特价菜</a>
+                        </li>*#
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="glyphicon glyphicon-user"></i> <span class="nav-label">组织管理</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="" href="$URL/merchant/admin/organization/sections" target="iframe0">组管理</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/organization/clerks" target="iframe0">员工管理</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="glyphicon glyphicon-credit-card"></i> <span class="nav-label">会员专区</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="" href="$URL/merchant/admin/card/cardTypes" target="iframe0">卡类型</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/card/cards" target="iframe0">会员卡管理</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/card/weixinMembers" target="iframe0">微会员管理</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/card/cardBatch" target="iframe0">批次管理</a>
+                        </li>
+                        #*<li><a class="J_menuItem" href="$URL/merchant/admin/card/cardPublishRules">微会员卡发放</a>
+                        </li>*#
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#"><i class="fa fa-money"></i> <span class="nav-label">券专区</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="" href="$URL/merchant/admin/coupon/couponTypes" target="iframe0">券类型</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/coupon/coupons" target="iframe0">优惠券管理</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/coupon/couponBatch" target="iframe0">批次管理</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/coupon/couponPublishRules" target="iframe0">券发放规则</a>
+                        </li>
+                        #*<li><a class="J_menuItem" href="$URL/merchant/admin/coupon/elecCouponPublishRules">电子券发放</a>
+                        </li>*#
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#"><i class="fa fa-table"></i> <span class="nav-label">数据统计</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="" href="$URL/merchant/admin/order/orders" target="iframe0">订单数据</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/order/tradeDays" target="iframe0">交接班记录</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/order/businessData" target="iframe0">收入统计</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/order/foodSellData" target="iframe0">商品销售统计</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/order/categorySellData" target="iframe0">大类销售统计</a>
+                        </li>
+                        #*<li><a class="J_menuItem" href="$URL/merchant/admin/order/payTypeData">支付方式统计</a>
+                        </li>*#
+                        #*<li><a class="J_menuItem" href="$URL/merchant/admin/order/orderTypeData">订单类型统计</a>
+                        </li>*#
+                        #*<li><a class="J_menuItem" href="$URL/merchant/admin/order/orderTimeData">销售时段统计</a>
+                        </li>*#
+                        <li><a class="" href="$URL/merchant/admin/order/cardData" target="iframe0">卡券数据统计</a>
+                        </li>
+                        #*<li><a class="J_menuItem" href="$URL/merchant/admin/order/couponData">优惠券数据统计</a>
+                        </li>*#
+                        #*<li><a class="J_menuItem" href="$URL/merchant/admin/order/couponData">优惠券数据统计</a>
+                        </li>*#
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="J_menuItem">
+                        <i class="glyphicon glyphicon-tags"></i>
+                        <span class="nav-label">账号管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        #if(${user.role} == "owner")
+                            <li>
+                                <a class="" href="$URL/merchant/admin/account/managers" target="iframe0">管理员列表</a>
+                            </li>
+                        #end
+                        <li>
+                            <a class="" href="$URL/merchant/admin/account/accountInfo" target="iframe0">账号信息</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="J_menuItem">
+                        <i class="iconfont">&#xe601;</i>
+                        <span class="nav-label">打印管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="" href="$URL/merchant/admin/printer/printers" target="iframe0">打印机列表</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/printer/ticketForms" target="iframe0">小票格式</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/printer/kitchenForms" target="iframe0">厨打格式</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/printer/controlForms" target="iframe0">控菜格式</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/printer/kitchenPrintSchemes" target="iframe0">厨打方案</a>
+                        </li>
+                    </ul>
+                </li>
+
+                #*<li>
+                    <a class="J_menuItem">
+                        <i class="fa fa-cart-arrow-down"></i>
+                        <span class="nav-label">采购管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="" href="$URL/merchant/admin/purchase/areas" target="iframe0">区域管理</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/purchase/suppliers" target="iframe0">供应商管理</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/purchase/" target="iframe0">采购单</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/purchase/" target="iframe0">收货单</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/purchase/" target="iframe0">退货单</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/purchase/" target="iframe0">结算单</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="J_menuItem">
+                        <i class="fa fa-bank"></i>
+                        <span class="nav-label">库存管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="" href="$URL/merchant/admin/printer/printers" target="iframe0">库存清单</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/printer/printers" target="iframe0">库存盘点</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="J_menuItem">
+                        <i class="glyphicon glyphicon-link"></i>
+                        <span class="nav-label">连锁管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a class="" href="$URL/merchant/admin/printer/printers" target="iframe0">要货单</a>
+                        </li>
+                        <li>
+                            <a class="" href="$URL/merchant/admin/printer/printers" target="iframe0">调出单</a>
+                        </li>
+                    </ul>
+                </li>*#
+
+                <li>
+                    <a class="J_menuItem"><i class="fa fa-gear"></i> <span class="nav-label">系统设置</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a class="" href="$URL/merchant/admin/setting/payment" target="iframe0">支付类型</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/setting/authKeys" target="iframe0">密钥文件</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/setting/dataTransfer" target="iframe0">数据备份与恢复</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/setting/advertise" target="iframe0">广告管理</a>
+                        </li>
+                        <li><a class="" href="$URL/merchant/admin/setting/opLogs" target="iframe0">操作日志</a>
+                        </li>
+                        #if($!shopSuperFlag)
+                            <li><a class="" href="$URL/merchant/admin/setting/wxConfig" target="iframe0">公众号配置</a>
+                            </li>
+                            <li><a class="" href="$URL/merchant/admin/setting/smsConfig" target="iframe0">短信网关配置</a>
+                            </li>
+                        #end
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+    <!--左侧导航结束-->
+    <!--右侧部分开始-->
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                    <div class="m-t-md">
+                        #if($!createNewShop)
+                            <i class="glyphicon glyphicon-home m-r-sm"></i>
+                            当前门店：<strong>尚未创建门店</strong>&nbsp;&nbsp;
+                            <a class="btn btn-success btn-rounded btn-xs btn-outline" id="createShop">
+                                <i class="fa fa-wrench"></i>&nbsp;&nbsp;创建门店
+                            </a>
+                        #else
+                            <i class="glyphicon glyphicon-home m-r-sm"></i>
+                            当前门店：<strong>$!{currentShop.name}</strong>（#if($!{currentShop.superFlag})总店#elseif($!currentShop)分店#end）&nbsp;编号：<strong>$!{currentShop.encodeId}</strong>&nbsp;
+                            <a class="btn btn-success btn-rounded btn-xs btn-outline" id="switchShop">
+                                <i class="fa fa-wrench"></i>&nbsp;切换门店
+                            </a>
+                        #end
+                    </div>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="" href="javascript:exit()">
+                            <i class="glyphicon glyphicon-off"></i> <span class="label label-primary"></span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i> <span class="label label-primary"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <div class="text-center link-block">
+                                    <a class="J_menuItem" href="notifications.html">
+                                        <strong>暂无通知</strong>
+                                    ##                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown hidden-xs">
+                        <a class="right-sidebar-toggle" aria-expanded="false">
+                            <i class="fa fa-tasks"></i> 主题
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        #*<div class="row content-tabs">
+            <button class="roll-nav roll-left J_tabLeft"><i class="fa fa-backward"></i>
+            </button>
+            <nav class="page-tabs J_menuTabs">
+                <div class="page-tabs-content">
+                    <a href="$URL/merchant/admin/order/charts" class="active J_menuTab J_menuItem" data-id="$URL/merchant/admin/order/charts">首页</a>
+                </div>
+            </nav>
+            <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
+            </button>
+            <div class="btn-group roll-nav roll-right">
+                <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
+
+                </button>
+                <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                    <li class="J_tabShowActive"><a>定位当前选项卡</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="J_tabCloseAll"><a>关闭全部选项卡</a>
+                    </li>
+                    <li class="J_tabCloseOther"><a>关闭其他选项卡</a>
+                    </li>
+                </ul>
+            </div>
+            <a href="javascript:exit()" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 注销</a>
+        </div>*#
+        <div class="row J_mainContent" id="content-main" style="border-top: solid 2px #2f4050">
+            #if($!shopIdSession)
+            <iframe name="iframe0" width="100%" height="100%" src="$URL/merchant/admin/order/charts" frameborder="0" data-id="$URL/merchant/admin/order/charts" seamless></iframe>
+            #end
+        </div>
+        <div class="footer">
+            <div class="pull-left">
+                #if($!{currentShop.expired})&nbsp;过期时间：$dateUtil.formateDateToStr($!{currentShop.expired}, 'yyyy-MM-dd')#end
+            </div>
+            <div class="pull-right">&copy; 无锡克维拉科技有限公司 <a href="http://www.co-villa.com/" target="_blank">co-villa.com</a>
+            </div>
+        </div>
+    </div>
+    <!--右侧部分结束-->
+    <!--右侧边栏开始-->
+    <div id="right-sidebar">
+        <div class="sidebar-container">
+
+            <ul class="nav nav-tabs navs-3">
+
+                <li class="active">
+                    <a data-toggle="tab" href="#tab-1">
+                        <i class="fa fa-gear"></i> 主题
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="sidebar-title">
+                        <h3><i class="fa fa-comments-o"></i> 主题设置</h3>
+                        <small><i class="fa fa-tim"></i> 你可以从这里选择和预览主题的布局和样式，这些设置会被保存在本地，下次打开的时候会直接应用这些设置。</small>
+                    </div>
+                    <div class="skin-setttings">
+                        <div class="title">主题设置</div>
+                        <div class="setings-item">
+                            <span>收起左侧菜单</span>
+
+                            <div class="switch">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox"
+                                           id="collapsemenu">
+                                    <label class="onoffswitch-label" for="collapsemenu">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setings-item">
+                            <span>固定顶部</span>
+
+                            <div class="switch">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="fixednavbar" class="onoffswitch-checkbox"
+                                           id="fixednavbar">
+                                    <label class="onoffswitch-label" for="fixednavbar">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setings-item">
+                                <span>
+                        固定宽度
+                    </span>
+
+                            <div class="switch">
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="boxedlayout" class="onoffswitch-checkbox"
+                                           id="boxedlayout">
+                                    <label class="onoffswitch-label" for="boxedlayout">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="title">皮肤选择</div>
+                        <div class="setings-item default-skin nb">
+                                <span class="skin-name ">
+                         <a href="#" class="s-skin-0">
+                             默认皮肤
+                         </a>
+                    </span>
+                        </div>
+                        <div class="setings-item blue-skin nb">
+                                <span class="skin-name ">
+                        <a href="#" class="s-skin-1">
+                            蓝色主题
+                        </a>
+                    </span>
+                        </div>
+                        <div class="setings-item yellow-skin nb">
+                                <span class="skin-name ">
+                        <a href="#" class="s-skin-3">
+                            黄色/紫色主题
+                        </a>
+                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="$URL/asset/bk/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/hplus.min.js?v=4.1.0"></script>
+<script type="text/javascript" src="$URL/asset/bk/js/contabs.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/pace/pace.min.js"></script>
+<script src="$URL/asset/bk/js/content.min.js"></script>
+</body>
+<script type="text/javascript">
+    var currentShopId = "$!{currentShop.objectIdStr}";
+
+    $("#switchShop").on("click", function(){
+        var index = layer.open({
+            title:"切换门店",
+            type: 2,
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ["860px", "360px"],
+            shadeClose: true, //开启遮罩关闭
+            content: '$URL/merchant/chooseShop'
+        });
+    })
+
+    $("#createShop").on("click", function () {
+        var index = layer.open({
+            title:"新建门店",
+            type: 2,
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            area: ["860px", "330px"],
+            content: '$URL/merchant/addShop'
+        });
+    })
+
+    if(#if($!createNewShop)true#elseif(true)false#end){//尚未创建门店
+        $("#createShop").click();
+    }else if(isNull("$!shopIdSession")&&!isNull("$!userSession")){//已有门店，登录失效
+        $("#switchShop").click();
+    }else if(isNull("$!shopIdSession")){
+        location.href = "$URL/merchant/logout";
+    }
+
+    function exit(){
+        layer.confirm("是否退出管理系统？", {btn:['退出', '取消']}, function(){
+            location.href = "$URL/merchant/logout";
+        });
+    }
+
+    $(".J_menuItem").on("click", function () {
+        $(".J_menuItem").css("color", "");
+        $(this).css("color", "white");
+    })
+</script>
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:17:11 GMT -->
+</html>

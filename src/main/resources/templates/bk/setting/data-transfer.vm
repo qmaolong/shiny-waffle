@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$TITLE</title>
+    <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/plugins/lou-multi-select-7a5354c/css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>数据备份</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="form_basic.html#">选项1</a>
+                            </li>
+                            <li><a href="form_basic.html#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content text-center">
+                    <form class="form-horizontal m-t" id="commentForm">
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-3">
+                                <button class="btn btn-primary" id="backupData" type="button">点击导出</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>数据恢复</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="form_basic.html#">选项1</a>
+                            </li>
+                            <li><a href="form_basic.html#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content text-center">
+                    <form class="form-horizontal m-t" id="signupForm" method="post" enctype="multipart/form-data" action="$URL/merchant/admin/setting/dataImport">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">备份文件：</label>
+                            <div class="col-sm-8">
+                                <input name="file" class="form-control" type="file" required>
+                                <span class="help-block m-b-none">#*<i class="fa fa-info-circle"></i> 这里写点提示的内容</span>*#
+                            </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-sm-3 control-label">需要恢复数据项：</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <select id="my-select" name="recoverItem" data-type="multiselect" required multiple='multiple'>
+                                            #foreach($item in $dataItems)
+                                                <option value="$!{item.code}">$!{item.desc}</option>
+                                            #end
+                                        </select>
+                                    </div>
+                                </div>
+                                #*<div class="col-sm-2"><br><br>
+                                    <a href='#' id='select-all'>选中全部</a><br><br>
+                                    <a href='#' id='deselect-all'>取消全部</a>
+                                </div>*#
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="checkbox" id="agree" name="agree" required> 备份数据将覆盖已有的数据
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/plugins/lou-multi-select-7a5354c/js/jquery.multi-select.js" type="text/javascript"></script>
+#parse("common/foot.vm")
+<script type="text/javascript">
+    $('#my-select').multiSelect()
+    $("#backupData").on("click", function(){
+        layer.confirm('确定导出？', {
+            btn: ['导出','取消'] //按钮
+        }, function(){
+            window.open('$URL/merchant/admin/setting/dataOutport');
+            layer.closeAll("dialog");
+        }, function(){
+            layer.closeAll("dialog");
+        });
+    })
+
+    $("#signupForm").validate({submitHandler: function() {
+        var formData = new FormData($("#signupForm")[0])
+        jQuery.ajax({
+            url : "$URL/merchant/admin/setting/dataImport",
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if(res.resultCode == 'SUCCESS'){
+                    layer.alert("操作成功！", function(){
+                        location.href = location.href;
+                    });
+                    layer.closeAll("loading");
+                    closeCurrentLayerPage();
+                }else {
+                    layer.alert(res.errCodeDesc);
+                    layer.closeAll("loading");
+                }
+            },
+            error: function () {
+                layer.alert("网络错误~");
+            }
+        })
+//        $("#foodImportPreview").submit();
+    }})
+</script>
+</body>
+</html>

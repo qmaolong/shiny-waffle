@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/plugins/webuploader/webuploader.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="tabs-container">
+                <div class="tab-content">
+                    <!-- 选项卡1-->
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="ibox-content">
+                            <form class="form-horizontal" id="signupForm"  method="post">
+                                <input type="hidden" name="oper" value="$oper">
+                                <input type="hidden" name="id">
+                                <div class="form-group m-t-lg">
+                                    <label class="col-xs-2 control-label">名称：</label>
+                                    <div class="col-xs-4">
+                                        <input id="name" name="name" class="form-control" minlength="1" type="text" required>
+                                    </div>
+                                    <label class="col-xs-2 control-label">券类型：</label>
+                                    <div class="col-xs-4">
+                                        <select  id="ticket" name="ticket" class="form-control" minlength="1" type="text" required>
+                                            #foreach($cardType in $!couponTypes)
+                                                <option value="$!{cardType.objectIdStr}" >$!{cardType.name}</option>
+                                            #end
+                                            #foreach($cardType in $!publicCouponTypes)
+                                                <option value="$!{cardType.objectIdStr}" >$!{cardType.name}#if($!{cardType.isPublic})（总店）#end</option>
+                                            #end
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-2 control-label">起止日期：</label>
+                                    <div class="col-xs-5">
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <input name="startTime" data-type="date" class="form-control" type="text">
+                                            <span class="input-group-addon">到</span>
+                                            <input id="abc" name="endTime" data-type="date" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                    <label class="col-xs-2 control-label">时间范围：</label>
+                                    <div class="col-xs-3">
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                <input type="text" class="form-control" name="dayOn" value="00:00">
+                                            </div>
+                                            <span class="input-group-addon">到</span>
+                                            <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                                                <input type="text" class="form-control" name="dayOff" value="23:59">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-2 control-label">适用日：</label>
+
+                                    <div class="col-xs-10">
+                                        <label class="checkbox-inline i-checks">
+                                            <input type="checkbox" name="sun">星期日</label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input type="checkbox" name="mon" checked>星期一</label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input type="checkbox" name="tue" checked>星期二</label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input type="checkbox" name="wed" checked>星期三</label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input type="checkbox" name="thu" checked>星期四</label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input type="checkbox" name="fri" checked>星期五</label>
+                                        <label class="checkbox-inline i-checks">
+                                            <input type="checkbox" name="sat">星期六</label>
+                                    </div>
+                                </div>
+                                <div class="form-group discount-type-1 discount-type-2">
+                                    <label class="col-xs-2 control-label">满足金额：</label>
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="minLine" number="true" min="0" required value="$!{discountRule.minLine}"> <span class="input-group-addon">元</span>
+                                        </div>
+                                    </div>
+                                    <label class="col-xs-2 control-label">发放数量：</label>
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="count" digits="true" min="0" required value="$!{discountRule.minLine}"> <span class="input-group-addon">张</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group discount-type-1 discount-type-2">
+                                    <label class="col-xs-2 control-label">重复满足：</label>
+                                    <div class="col-xs-4">
+                                        <div class="radio i-checks">
+                                            <label>
+                                                <input type="radio" value="false" name="repeat" checked> <i></i> 否</label>
+                                            <label>
+                                                <input type="radio" value="true" name="repeat"> <i></i>是</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-8 col-xs-offset-5" id="toolbar">
+                                        <button class="btn btn-primary #if($oper == 'look')hidden#end" type="submit">提交</button>
+                                        <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/clockpicker/clockpicker.js"></script>
+#parse("common/foot.vm")
+<script>
+    $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})});
+    $('.clockpicker').clockpicker({
+        afterShow : function(){
+            $(".clockpicker-popover").css("z-index", "999999999");
+        }
+    })
+
+    $("input[name='medium']").on("ifChecked", function(){
+        var medium = $(this).val();
+        if(medium == 1){
+            $(".medium-card").removeClass("hidden");
+            $(".abstract-card").addClass("hidden")
+        }else if(medium == 2){
+            $(".medium-card").removeClass("hidden");
+            $(".abstract-card").addClass("hidden")
+        }else if(medium == 0){
+            $(".medium-card").addClass("hidden");
+            $(".abstract-card").removeClass("hidden")
+        }
+    })
+
+    $("input[name='isPublic']").on("ifChecked", function(){
+        var isPublic = $(this).val();
+        if(isPublic == "true"){
+            $(".public-type").removeClass("hidden").removeAttr("disabled");
+            $(".private-type").addClass("hidden").attr("disabled", true);
+        }else {
+            $(".private-type").removeClass("hidden").removeAttr("disabled");
+            $(".public-type").addClass("hidden").attr("disabled", true);
+        }
+    })
+
+    //加载上层编辑的数据
+    if("add" != "$oper"){
+        var parentEditObj = parent.Global.editObj;
+        iniDataToForm(parentEditObj);
+        if(parentEditObj.cardState > 0){
+            $("input[name='cardState']").iCheck('disable');
+        }
+    }
+
+    //初始化表单
+    $("#signupForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("signupForm");
+        formData = transFormToObj(formData);
+        layer.load();
+        jQuery.ajax({
+            url : "$URL/merchant/admin/coupon/editCouponPublishRule",
+            data : {dataStr : JSON.stringify(formData), oper : "$oper"},
+            type : "post",
+            success : function(res){
+                if(res.resultCode == 'SUCCESS'){
+                    layer.msg("操作成功！");
+                    layer.closeAll("loading");
+                    closeCurrentLayerPage();
+                }else {
+                    layer.alert(res.errCodeDesc);
+                    layer.closeAll("loading");
+                }
+            }
+        })
+    }});
+
+</script>
+
+</body>
+</html>
