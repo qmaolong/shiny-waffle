@@ -2,14 +2,14 @@
 <html>
 <head>
 #set($title = "首页")
-#parse("site/header.vm")
+#parse("templates/site/header.vm")
 </head>
 <body>
 <!--header strat here-->
 <div class="banner agileits">
     <div class="header">
         <div class="container">
-            #parse("site/top_nav.vm")
+            #parse("templates/site/top_nav.vm")
             <div class="banner-main">
                 <section class="slider">
                     <div class="flexslider">
@@ -165,6 +165,6 @@
         });
     });
 </script>
-#parse("site/footer.vm")
+#parse("templates/site/footer.vm")
 </body>
 </html>

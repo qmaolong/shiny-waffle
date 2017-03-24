@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    #parse("common/base-wx.vm")
+    #parse("templates/common/base-wx.vm")
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>个人中心</title>

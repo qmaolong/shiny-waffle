@@ -95,7 +95,7 @@ function iniDataToForm(selectData, callBack) {
             }
         } else if ($("input[name=" + data + "]").attr("data-type") == "imgUrl") {
             $("input[name=" + data + "]").val(selectData[data]);
-            $("input[name=" + data + "]").parent().next().find("#fileList").html("<img src='/static/" + selectData[data] + "' style='width:60px;height:60px'>");
+            $("input[name=" + data + "]").parent().next().find("#fileList").html("<img src=" + selectData[data] + "'/static' style='width:60px;height:60px'>");
         } else if ($("input[name=" + data + "]").attr("type") == "radio") {
             $("input[name=" + data + "][value=" + selectData[data] + "]").iCheck('check');
         } else if ($("select[name=" + data + "]").attr("data-type") == "multiselect") {

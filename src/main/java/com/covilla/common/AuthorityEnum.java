@@ -4,8 +4,8 @@ package com.covilla.common;
  * Created by qmaolong on 2017/3/17.
  */
 public enum  AuthorityEnum {
-    MERCHANT("ROLE_MERCHANT", "商家后台管理"),
-    ADMIN("ROLE_ADMIN", "系统管理");
+    MERCHANT("MERCHANT", "商家后台管理"),
+    ADMIN("ADMIN", "系统管理");
     private String name;
     private String desc;
 

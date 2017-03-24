@@ -76,7 +76,7 @@ public class DataTransferController {
     public ResultMsg dataImport(MultipartFile file, String recoverItem, HttpServletRequest request, HttpSession session){
         ObjectId shopId = (ObjectId)session.getAttribute(Constant.SHOPID_SESSION);
         try {
-            String path = request.getSession().getServletContext().getRealPath("asset/upload");
+            String path = request.getSession().getServletContext().getRealPath("static/asset/upload");
             String fileName = file.getOriginalFilename();
             if(!fileName.endsWith(".backup")){
                 return ResultMsg.buildFailMsg("-1", "文件格式不支持~");

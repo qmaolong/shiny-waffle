@@ -2,7 +2,7 @@
 <html>
 <head>
     #set($title = "关于我们")
-#parse("site/header.vm")
+#parse("templates/site/header.vm")
     <link type="text/css" rel="stylesheet" href="/asset/site/css/colorfulTab.min.css">
 </head>
 <body>
@@ -10,7 +10,7 @@
 <div class="banner1 agileits">
     <div class="header">
         <div class="container">
-#parse("site/top_nav.vm")
+#parse("templates/site/top_nav.vm")
         </div>
     </div>
 </div>
@@ -191,6 +191,6 @@
     </div>
 </div>
 *#
-    #parse("site/footer.vm")
+    #parse("templates/site/footer.vm")
 </body>
 </html>

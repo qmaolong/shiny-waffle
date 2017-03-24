@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    #parse("common/base-bk.vm")
+    #parse("templates/common/base-bk.vm")
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>克维拉餐饮系统后台</title>
@@ -52,7 +52,7 @@
 <script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
 <script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
 <script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
-#parse("common/foot.vm")
+#parse("templates/common/foot.vm")
 </body>
 <script type="text/javascript">
     var loginCode = "$!{loginCode}";

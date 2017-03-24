@@ -1,12 +1,15 @@
 package com.covilla;
 
 import com.covilla.config.MyErrorPageRegister;
+import com.covilla.servlet.InitServlet;
+import org.apache.catalina.servlets.DefaultServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.ErrorPageRegistrar;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -28,7 +31,7 @@ public class Application {
         TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
         factory.setPort(9000);
         factory.setSessionTimeout(10, TimeUnit.MINUTES);
-        factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/notfound.html"));
+//        factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/notfound.html"));
         return factory;
     }
 
@@ -36,5 +39,10 @@ public class Application {
     public ErrorPageRegistrar errorPageRegistrar(){
         return new MyErrorPageRegister();
     }
+
+    /*@Bean
+    public ServletRegistrationBean servletRegistrationBean() {
+        return new ServletRegistrationBean(new InitServlet());
+    }*/
 
 }

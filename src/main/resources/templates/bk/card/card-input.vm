@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    #parse("common/base-bk.vm")
+    #parse("templates/common/base-bk.vm")
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -171,7 +171,7 @@
 <script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
 <script src="$URL/asset/bk/js/plugins/webuploader/webuploader.min.js"></script>
 <script src="$URL/asset/bk/my-selector.js?v=fdd"></script>
-#parse("common/foot.vm")
+#parse("templates/common/foot.vm")
 <script>
     $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})});
 

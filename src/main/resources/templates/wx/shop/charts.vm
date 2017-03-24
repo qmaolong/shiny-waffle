@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    #parse("common/base-wx.vm")
+    #parse("templates/common/base-wx.vm")
     <meta charset="utf-8">
     <title>门店数据统计</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">

@@ -1,7 +1,7 @@
 <div class="weui_tabbar">
     <a href="$URL/mission/hall" class="weui_tabbar_item mission_tab">
         <div class="weui_tabbar_icon">
-            <img src="$URL/asset/img/icon_nav_article.png" alt="">
+            <img src="$URL/static/asset/img/icon_nav_article.png" alt="">
         </div>
         <p class="weui_tabbar_label">任务大厅</p>
     </a>
@@ -19,7 +19,7 @@
     </a>-->
     <a href="$URL/user/usercenter" class="weui_tabbar_item user_tab">
         <div class="weui_tabbar_icon">
-            <img src="$URL/asset/img/icon_nav_cell.png" alt="">
+            <img src="$URL/static/asset/img/icon_nav_cell.png" alt="">
         </div>
         <p class="weui_tabbar_label">个人中心</p>
     </a>

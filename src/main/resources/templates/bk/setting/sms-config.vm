@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    #parse("common/base-bk.vm")
+    #parse("templates/common/base-bk.vm")
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$TITLE</title>
@@ -125,7 +125,7 @@
 <script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
 <script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
 <script src="$URL/asset/bk/plugins/lou-multi-select-7a5354c/js/jquery.multi-select.js" type="text/javascript"></script>
-#parse("common/foot.vm")
+#parse("templates/common/foot.vm")
 <script type="text/javascript">
 
         #if($!{smsConfig.useSystem})

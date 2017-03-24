@@ -2,13 +2,13 @@
 <html>
 <head>
     #set($title = "联系我们")
-#parse("site/header.vm")
+#parse("templates/site/header.vm")
 </head>
 <body>
 <div class="banner1 agileits">
     <div class="header">
         <div class="container">
-            #parse("site/top_nav.vm")
+            #parse("templates/site/top_nav.vm")
         </div>
     </div>
 </div>
@@ -44,6 +44,6 @@
         </div>
     </div>
 </div>
-    #parse("site/footer.vm")
+    #parse("templates/site/footer.vm")
 </body>
 </html>
