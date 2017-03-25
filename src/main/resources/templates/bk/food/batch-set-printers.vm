@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/jsTree/style.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabs-container">
+                <div class="pull-right">
+                    <button class="btn btn-primary" type="submit" id="submit""><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;保存</button>
+                    <button class="btn btn-primary" type="button" id="closeLayer"><i class="glyphicon glyphicon-remove"></i>&nbsp;关闭</button>
+                </div>
+                <ul class="nav nav-tabs">
+                    <li class="active" id="tab-base"><a data-toggle="tab" href="#tab-1" aria-expanded="true">批量设置</a>
+                    </li>
+                </ul>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="signupForm" method="post">
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label i-checks">
+                                <input type="checkbox" name="setProperty" value="true" >设置属性：</label>
+                            <div class="col-xs-10">
+                                #foreach($property in $properties)
+                                    <label class="checkbox-inline i-checks">
+                                        <input type="checkbox" name="property" value="$!{property.code}" #if($oper=="add"&&$!{property.defaultValue})checked#end>$!{property.desc}</label>
+                                #end
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label class="col-xs-4 control-label">打印机1：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printer1" name="printer1" class="form-control" minlength="1" type="text">
+                                        <option value="continue">不设置</option>
+                                        <option value="">无</option>
+                                        #foreach($printer in $printers)
+                                            <option value="$!{printer.name}" hassubinfo="true">$!{printer.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <label class="col-xs-4 control-label">打印机2：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printer2" name="printer2" class="form-control" minlength="1" type="text">
+                                        <option value="continue">不设置</option>
+                                        <option value="">无</option>
+                                        #foreach($printer in $printers)
+                                            <option value="$!{printer.name}" hassubinfo="true">$!{printer.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label class="col-xs-4 control-label">打印机3：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printer3" name="printer3" class="form-control" minlength="1" type="text">
+                                        <option value="continue">不设置</option>
+                                        <option value="">无</option>
+                                        #foreach($printer in $printers)
+                                            <option value="$!{printer.name}" hassubinfo="true">$!{printer.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <label class="col-xs-4 control-label">控菜打印机：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printerControl" name="printerControl" class="form-control" minlength="1" type="text">
+                                        <option value="continue">不设置</option>
+                                        <option value="">无</option>
+                                        #foreach($printer in $printers)
+                                            <option value="$!{printer.name}" hassubinfo="true">$!{printer.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label class="col-xs-4 control-label">厨打方案：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printerPolicy" name="printerPolicy" class="form-control" minlength="1" type="text">
+                                        <option value="continue">不设置</option>
+                                        <option value="">无</option>
+                                        #foreach($printerPolicy in $printerPolicies)
+                                            <option value="$!{printerPolicy.name}" hassubinfo="true">$!{printerPolicy.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <label class="col-xs-4 control-label">状态：</label>
+                                <div class="col-xs-8">
+                                    <select id="foodState" name="foodState" class="form-control" minlength="1" type="text">
+                                        <option value="continue">不设置</option>
+                                        <option value="0">可用</option>
+                                        <option value="1" hassubinfo="true">不可用</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div id="tab-1" class="form-group">
+                            <div class="col-xs-3" style="padding:5px;">
+                                <div class="ibox float-e-margins" style="border: solid #e7eaec">
+                                    <div class="ibox-title">
+                                        <h5>分类</small></h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content" style="min-height: 542px;padding-left:0px">
+                                        <input type="hidden" id="childrenId" value="$!{categories.get(0).children.get(0).id}">
+                                        <div id="jstree1">
+                                            <ul>
+                                                #foreach($category in $!{categories})
+                                                    <li  class="jstree-open" data-jstree='{"type":"second"}'>
+                                                        $!{category.id}-$!{category.name}
+                                                        <ul>
+                                                            #foreach($child in ${category.children})
+                                                                <li data-jstree='{"type":"third"}'class="#if($velocityCount == 1&&$firstCount == 1)jstree-clicked#end " onclick="javascript:chooseChildren('$!{child.id}')">$!{child.id}-$!{child.name}</li>
+                                                            #end
+                                                        </ul>
+
+                                                    </li>
+                                                #end
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-4" style="padding:5px">
+                                <div class="ibox float-e-margins" style="border: solid #e7eaec">
+                                    <div class="ibox-title">
+                                        <h5>可选菜</small></h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <table id="notSelectedTable" class="table" data-classes="table table-hover table-condensed"  data-striped="true" data-height="505"
+                                               data-pagination="true"
+                                               data-page-size="10">
+                                            <thead>
+                                            <tr>
+                                                <th data-field="state" data-checkbox="true">
+                                                <th data-field="name">名称</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-1" style="padding:5px">
+                                <br/><br/><br/><br/><br/><br/>
+                                <button type="button" id="keepRenderingSort_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button><br/>
+                                <button type="button" id="keepRenderingSort_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button><br/><br/><br/>
+                                <button type="button" id="keepRenderingSort_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button><br/>
+                                <button type="button" id="keepRenderingSort_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+                            </div>
+                            <div class="col-xs-4" style="padding:5px">
+                                <div class="ibox float-e-margins" style="border: solid #e7eaec">
+                                    <div class="ibox-title">
+                                        <h5>已选中</small></h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <table id="selectedTable" class="table" data-classes="table table-hover table-condensed"  data-striped="true" data-height="505"
+                                               data-pagination="true"
+                                               data-page-size="10">
+                                            <thead>
+                                            <tr>
+                                                <th data-field="state" data-checkbox="true">
+                                                <th data-field="name">名称</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    #*<div class="btn-group m-t" id="exampleToolbar" role="group">
+                        <button type="button" id="addFood" class="btn btn-outline btn-default">
+                            <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" id="deleteFood" class="btn btn-outline btn-default">
+                            <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <table id="combosTable" class="table" data-classes="table table-hover table-condensed" data-mobile-responsive="true"  data-height="280">
+                        <thead>
+                        <tr>
+                            <th data-field="state" data-checkbox="true">
+                            <th data-field="id">ID</th>
+                            <th data-field="name">名称</th>
+                            <th data-field="price1" >价格1</th>
+                        </tr>
+                        </thead>
+                    </table>*#
+                </div>
+                <div class="tab-content">
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/jsTree/jstree.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/my-selector.js?v=$timestamp"></script>
+<script src="$URL/asset/bk/js/plugins/chosen/chosen.jquery.js"></script>
+#parse("templates/common/foot.vm")
+<script>
+
+    $("#jstree1").jstree({
+        "core": {"check_callback": true},
+        "plugins": ["types", "dnd"],
+        "types": {
+            "default": {"icon": "fa fa-tag"},
+            "top": {"icon": "glyphicon glyphicon-menu-hamburger"},
+            "second" : {"icon": "glyphicon glyphicon-stop"},
+            "third" : {"icon": "glyphicon glyphicon-triangle-right"}
+        }
+    });
+    $(function () {
+        //初始化控件
+        MySelector.init({
+            refreshUnselectedTable : function(){
+                var childrenId = $("#childrenId").val();
+                jQuery.ajax({
+                    url: "$URL/merchant/admin/food/getFoodList?cateChildrenId=" + childrenId,
+                    type: "get",
+                    async : false,
+                    success : function(res){
+                        MySelector.tableData1 = MySelector.filterData1ExitInData2(res, MySelector.getTableData2());
+                        $("#notSelectedTable").bootstrapTable('load', {data: MySelector.tableData1});
+                    }
+                });
+            }
+        })
+
+        $("#notSelectedTable").bootstrapTable({data: MySelector.tableData1});//初始化数据表1
+        MySelector.refreshUnselectedTable();
+        $('#selectedTable').bootstrapTable({
+            data: MySelector.tableData2
+        });
+    });
+
+    function chooseChildren(childrenId){
+        $('#childrenId').val(childrenId);
+        MySelector.refreshUnselectedTable();
+    }
+
+    $(document).ready(function () {
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",});
+    });
+    $('.chosen-select').chosen();
+
+    //初始化菜品列表
+    $("#combosTable").bootstrapTable({
+        data: []
+    });
+
+    $("#submit").on("click", function(){
+        var foods = $("#selectedTable").bootstrapTable("getData");
+        var formData = getDataFromForm("signupForm");
+        if(isNull(foods) || foods.length == 0){
+            layer.alert("请先选中要设置的菜品");
+            return;
+        }
+        jQuery.ajax({
+            url : '$URL/merchant/admin/food/setPrinters',
+            type : 'post',
+            data : {foods : JSON.stringify(foods), formData : JSON.stringify(formData)},
+            success : function(data){
+                if(data.resultCode == 'SUCCESS'){
+                    layer.msg("设置成功");
+                    closeCurrentLayerPage();
+                }else {
+                    layer.alert(data.errCodeDesc);
+                }
+            }
+        })
+    })
+
+    $("#addFood").on("click", function () {
+        var index = layer.open({
+            title:'选择菜品',
+            type: 2,
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['95%', '90%'],
+            shadeClose: true, //开启遮罩关闭
+            content: '$URL/merchant/admin/food/batchChooseFood',
+            success : function(layero, index){
+
+            },
+            end : function(){
+                $("button[type='submit']").css("display", "");
+                $("form input").removeClass("disabled");
+                $("form select").removeClass("disabled");
+                $("form textarea").removeClass("disabled");
+            }
+        });
+    })
+
+    $("#deleteFood").on("click", function () {
+        var rows = $("#combosTable").bootstrapTable("getSelections");
+        if (rows.length == 0) {
+            rows = [];
+            var checkedData = trimNull(getSelectedRow("#combosTable"));
+            if (undefined != checkedData) {
+                rows.push(checkedData);
+            }
+        }
+        if(rows == undefined || rows.length==0){
+            layer.msg("请先选中一行");
+            return;
+        }
+        var ids = [];
+        jQuery.each(rows, function(i, row){
+            ids.push(row.id);
+        })
+        $("#combosTable").bootstrapTable('remove', {field: 'id', values: ids});
+        layer.msg("删除成功");
+    })
+</script>
+
+</body>
+</html>

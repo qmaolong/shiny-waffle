@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox-content text-center">
+                <form class="form-horizontal" id="foodImportForm" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="options">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">选择csv文件：</label>
+                        <div class="col-xs-8">
+                            <input name="file" class="form-control"  type="file" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-8 col-xs-offset-3 text-right"><a href="javascript:lookFormate()">数据格式查看</a></label>
+                    </div>
+                    <div class="form-group toolbar">
+                        <div class="col-sm-7 col-sm-offset-5 m-t-lg">
+                            #if($oper != "look")
+                                <button class="btn btn-primary" type="submit">预览</button>
+                            #end
+                            <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/plugins/layer/layer.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+    #parse("templates/common/foot.vm")
+<script>
+    //初始化表单
+    $("#foodImportForm").validate({submitHandler: function() {
+        var formData = new FormData($("#foodImportForm")[0]);
+        jQuery.ajax({
+            url : "$URL/merchant/admin/food/foodImportPreview",
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                parent.importingData = res.result;
+                if(res.resultCode == 'SUCCESS'){
+                    parent.layer.open({
+                        title:"导入菜品预览",
+                        type: 2,
+                        closeBtn: 1, //不显示关闭按钮
+                        shift: 2,
+                        maxmin: true,
+                        area: ['80%', '70%'],
+                        shadeClose: true, //开启遮罩关闭
+                        content: '$URL/merchant/admin/food/foodImportPreviewPage'
+                    })
+                    layer.closeAll("loading");
+                    closeCurrentLayerPage();
+                }else {
+                    layer.alert(res.errCodeDesc);
+                    layer.closeAll("loading");
+                }
+            },
+            error: function () {
+                layer.alert("网络错误~");
+            }
+        })
+    }});
+
+    function lookFormate(){
+        parent.layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            area: '1120px',
+            skin: 'layui-layer-nobg', //没有背景色
+            shadeClose: true,
+            content: '<img src="$URL/asset/bk/img/example/food-import-example.jpg">'
+        });
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/plugins/webuploader/webuploader.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/chosen/chosen.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="signupForm" method="post">
+                    <input type="hidden" name="_id">
+                    <input type="hidden" name="objectIdStr">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="col-xs-3 control-label">用户名：</label>
+                            <div class="col-xs-8">
+                                <input id="name" name="name" class="form-control" minlength="1" type="text" required #if($oper!="add")readonly#else userName="true" value=" " onchange="trimBlank()" #end>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="col-xs-3 control-label">密码：</label>
+                            <div class="col-xs-8">
+                                <input id="password" name="password" class="form-control" minlength="5" type="password" required >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label class="col-xs-3 control-label">可管理门店：</label>
+                            <div class="col-xs-5">
+                                <div class="input-group">
+                                    <select data-placeholder="选择门店（可多选）" name="manageShopStr" class="chosen-select" multiple required  minlength="1" style="width:330px;" tabindex="4">
+                                        #foreach($shop in $shops)
+                                            <option value="$!{shop.objectIdStr}" hassubinfo="true">$!{shop.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group m-t-lg">
+                        <div class="col-xs-8 col-xs-offset-5">
+                            <button class="btn btn-primary" type="submit">提交</button>
+                            <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="$URL/asset/bk/my-selector.js?v=fdd"></script>
+<script src="$URL/asset/bk/js/jquery-ui-1.10.4.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/chosen/chosen.jquery.js"></script>
+    #parse("templates/common/foot.vm")
+<script>
+    $(document).ready(function(){
+        $(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})
+        $('.chosen-select').chosen();
+    });
+
+    if("add" != "$oper"){
+        var parentEditObj = parent.Global.editObj;
+        iniDataToForm(parentEditObj, function(){
+            var managerShopStr = parentEditObj.manageShopStr;
+            var managerShops = managerShopStr.split(",");
+            $("select[name='manageShopStr']").val(managerShops)
+        });
+
+    }
+
+    $("#signupForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("signupForm");
+        layer.load();
+        jQuery.ajax({
+            url : "$URL/merchant/admin/account/editManager",
+            data : {dataStr : JSON.stringify(formData), oper : "$oper"},
+            type : "post",
+            success : function(res){
+                if(res.resultCode == 'SUCCESS'){
+                    layer.msg("操作成功！");
+                    layer.closeAll("loading");
+                    closeCurrentLayerPage();
+                }else {
+                    layer.alert(res.errCodeDesc);
+                    layer.closeAll("loading");
+                }
+            }
+        })
+    }});
+
+    //用户名格式限制
+    jQuery.validator.addMethod("userName", function(value, element) {
+        var format = /^[a-zA-z]\w{2,15}$/;
+        return this.optional(element) || (format.test(value));
+    }, "用户名需以字母开头，长度为3~16个字母或数字");
+    //重复密码限制
+    jQuery.validator.addMethod("repeatPassword", function(value, element) {
+        var password = $("input[name='password']").val();
+        return value==password;
+    }, "两次密码不一致");
+
+    $("input[name]").on("click", function () {
+        $(this).val($(this).val().trim());
+    })
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$TITLE</title>
+    <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/plugins/lou-multi-select-7a5354c/css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>短信网关配置</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="form_basic.html#">选项1</a>
+                            </li>
+                            <li><a href="form_basic.html#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content text-center">
+                    <form class="form-horizontal m-t" id="signupForm" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">使用系统配置：</label>
+                            <div class="col-sm-3">
+                                <div class="radio i-checks">
+                                    <label>
+                                        <input type="radio" value="false" name="useSystem" #if(!$!{smsConfig.useSystem})checked#end> <i></i>否</label>
+                                    <label>
+                                        <input type="radio" value="true" name="useSystem" #if($!{smsConfig.useSystem})checked#end> <i></i>是</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group private-area">
+                            <label class="col-sm-3 control-label">短信平台类型：</label>
+                            <div class="col-sm-6">
+                                <select  id="appName" name="appName" class="form-control" minlength="1" type="text" required >
+                                    #foreach($type in $appTypes)
+                                        <option value="$!{type.name}" #if(${smsConfig.appName}==${type.name})selected#end>$!{type.desc}</option>
+                                    #end
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group private-area">
+                            <label class="col-sm-3 control-label">AppKey：</label>
+                            <div class="col-sm-6">
+                                <input name="appKey" class="form-control" #if(!$!{smsConfig.useSystem})value="$!{smsConfig.appKey}"#end  type="text" required>
+                                <span class="help-block m-b-none">
+                            </div>
+                        </div>
+                        <div class="form-group private-area">
+                            <label class="col-sm-3 control-label">AppSecret：</label>
+                            <div class="col-sm-6">
+                                <input name="appSecret" class="form-control" #if(!$!{smsConfig.useSystem})value="$!{smsConfig.appSecret}" #end type="password" required>
+                                <span class="help-block m-b-none">
+                            </div>
+                        </div>
+                        <div class="form-group private-area">
+                            <label class="col-sm-3 control-label">支持验证码：</label>
+                            <div class="col-sm-3">
+                                <div class="radio i-checks">
+                                    <label>
+                                        <input type="radio" value="false" name="checkCode" checked> <i></i> 否</label>
+                                    <label>
+                                        <input type="radio" value="true" name="checkCode" #if(${smsConfig.checkCode})checked#end> <i></i> 是</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group private-area">
+                            <label class="col-sm-3 control-label">模板编号：</label>
+                            <div class="col-sm-6">
+                                <input name="template" class="form-control" #if(!$!{smsConfig.useSystem})value="$!{smsConfig.template}"#end  type="text">
+                                <span class="help-block m-b-none">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">签名：</label>
+                            <div class="col-sm-6">
+                                <input name="signature" class="form-control" #if(!$!{smsConfig.useSystem})value="$!{smsConfig.signature}"#end  type="text">
+                                <span class="help-block m-b-none">
+                            </div>
+                        </div>
+                        <div class="form-group private-area">
+                            <label class="col-sm-3 control-label">每日可发送上限：</label>
+                            <div class="col-sm-6">
+                                <input name="dayLimit" class="form-control" number="true" min="0" #if(!$!{smsConfig.useSystem})value="$!{smsConfig.dayLimit}" #end type="text" placeholder="非必填">
+                                <span class="help-block m-b-none">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-1">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/plugins/lou-multi-select-7a5354c/js/jquery.multi-select.js" type="text/javascript"></script>
+#parse("templates/common/foot.vm")
+<script type="text/javascript">
+
+        #if($!{smsConfig.useSystem})
+        $(".private-area").addClass("hidden");
+        #end
+    $(document).ready(function () {
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+    });
+
+    $("#signupForm").validate({submitHandler: function() {
+        var formData =  getDataFromForm("signupForm")
+        jQuery.ajax({
+            url : "$URL/merchant/admin/setting/editSmsConfig",
+            type: 'POST',
+            data: {dataStr : JSON.stringify(formData)},
+            success: function (res) {
+                if(res.resultCode == 'SUCCESS'){
+                    layer.alert("操作成功！", function(){
+                        location.href = location.href;
+                    });
+                    layer.closeAll("loading");
+                    closeCurrentLayerPage();
+                }else {
+                    layer.alert(res.errCodeDesc);
+                    layer.closeAll("loading");
+                }
+            },
+            error: function () {
+                layer.alert("网络错误~");
+            }
+        })
+    }})
+
+    $("input[name='useSystem']").on("ifChecked", function () {
+        var useSystem = $(this).val();
+        if (useSystem=='false'){
+            $(".private-area").removeClass("hidden");
+        }else {
+            $(".private-area").addClass("hidden");
+        }
+    })
+    
+</script>
+</body>
+</html>

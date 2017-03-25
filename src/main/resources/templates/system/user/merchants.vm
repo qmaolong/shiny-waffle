@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+
+        <div class="ibox-content">
+            <div class="row row-lg">
+
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <div id="toolbar" class="btn-group">
+                                <button type="button" class="btn btn-default add">
+                                    <i class="glyphicon glyphicon-plus"></i>&nbsp;添加
+                                </button>
+                                <button type="button" class="btn btn-default edit">
+                                    <i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑
+                                </button>
+                                <button type="button" class="btn btn-default delete">
+                                    <i class="glyphicon glyphicon-trash"></i>&nbsp;删除
+                               </button>
+                                <button type="button" class="btn btn-default" id="shopsButton">
+                                    <i class="glyphicon glyphicon-search"></i>&nbsp;查看门店
+                                </button>
+                                #*<button type="button" class="btn btn-default closeFrame">
+                                    <i class="glyphicon glyphicon-remove"></i>&nbsp;关闭
+                                </button>*#
+                            </div>
+                            <table id="table" data-height="700"
+                                   data-toggle="table"
+                                   data-striped="true"
+                                   data-query-params="queryParams"
+                                   data-pagination="true"
+                                   data-search="true"
+                                   data-show-refresh="true"
+                                   data-show-toggle="true"
+                                   data-show-columns="true"
+                                   data-page-list="[5, 10, 20, 50, 100, 200]"
+                                   data-page-size="15"
+                                   data-toolbar="#toolbar" data-mobile-responsive="true">
+                                <thead>
+                                <tr>
+##                                    <th data-field="state" data-checkbox="true"></th>
+                                    <th data-field="encodeId" data-sortable="true">ID</th>
+                                    <th data-field="name">名称</th>
+                                    <th data-field="activeCode" data-formatter="activeCodeFormatter">激活码</th>
+                                    <th data-field="nickName" data-formatter="nickNameFormatter">微信昵称</th>
+                                    <th data-field="createTime" data-formatter="Formatter.time">创建日期</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+#parse("templates/common/foot.vm")
+<script type="text/javascript">
+    $("#table").bootstrapTable({
+        url: "$URL/sys/system/user/getMerchants",
+        responseHandler : "responseHandler"
+    });
+
+    initEdit({
+        addButton : ".add",
+        editButton : ".edit",
+        deleteButton : ".delete",
+        lookButton : ".look",
+        name : "管理员",
+        layerType : 2,
+        content : '$URL/sys/system/user/merchantInput',
+        editUrl : '$URL/sys/system/user/merchantEdit',
+        area : ['800px', '360px']
+    })
+
+
+    function activeCodeFormatter(value, row, index){
+        var time = new Date().getTime();
+        if(time > row.codeExpireTime){
+            return "已过期";
+        }
+        return value;
+    }
+    function nickNameFormatter(value, row){
+        if(isNull(row.openId)){
+            return "未绑定微信"
+        }else if(isNull(value)){
+            return "-";
+        }
+        return value;
+    }
+
+    $("#shopsButton").on("click", function(){
+        var data = getSelectedRow("#table")
+        if(isNull(data)){
+            layer.msg("请先选中一个商家");
+        }
+        layer.open({
+            title:"商家门店",
+            type: 2,
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['80%', '80%'],
+            content: '$URL/sys/system/user/merchantShops?id=' + data.id,
+            end: function () {
+            },
+            success : function(layero, index){
+
+            }
+        })
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小票格式列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>条件筛选</h5>
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+                <a class="close-link">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content" style="min-height:72px">
+            <form role="form" id="searchForm" class="form-inline pull-right">
+                <div class="form-group">
+                    <label class="font-noraml">日期范围:</label>
+                    <div class="input-daterange input-group" id="datepicker">
+                        <input type="text" class="input-sm form-control" data-type="date" name="startDate"/>
+                        <span class="input-group-addon">到</span>
+                        <input type="text" class="input-sm form-control" data-type="date" name="endDate" />
+                    </div>
+                </div>
+                <div class="form-group m-l-lg">
+                    <button class="btn btn-success pull-right" type="submit">筛选</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="row row-lg">
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div id="toolbar" class="btn-group">
+                        #*<button type="button" class="btn btn-default look">
+                            <i class="glyphicon glyphicon-search"></i>&nbsp;查看
+                        </button>*#
+                        #*<button type="button" class="btn btn-default closeFrame">
+                            <i class="glyphicon glyphicon-remove"></i>&nbsp;关闭
+                        </button>*#
+                    </div>
+                    <table id="table" data-height="500"
+                           data-toggle="table"
+                           data-striped="true"
+                           data-show-toggle="true"
+                           data-show-columns="true"
+                           data-toolbar="#toolbar" data-mobile-responsive="true"
+                           data-show-export="true"
+                           data-export-data-type="all">
+                        <thead>
+                        <tr>
+                            <th data-field="shopName">门店</th>
+                            <th data-field="superFlag" data-formatter="typeFormatter">门店类型</th>
+                            <th data-field="cardType" >券类型</th>
+                            <th data-field="payAmount" >消费金额</th>
+                            <th data-field="discountAmount" >优惠金额</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/bootstrap-table-toolbar.js"></script>
+<script src="$URL/asset/bk/js/content.min.js"></script>
+<script src="$URL/asset/bk/js/bootstrap-table-export.js?v=1"></script>
+<script src="$URL/asset/bk/js/tableExport.js"></script>
+    #parse("templates/common/foot.vm")
+<script type="text/javascript">
+    $("#table").bootstrapTable({
+        data : []
+    });
+
+    //初始化筛选表单
+    $("#searchForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("searchForm");
+        layer.load();
+        jQuery.ajax({
+            url : "$URL/merchant/admin/order/getCouponData",
+            data : {dataStr : JSON.stringify(formData)},
+            type : "get",
+            success : function(res){
+                $("#table").bootstrapTable('load',{
+                    data : responseHandler(res)
+                });
+                layer.closeAll("loading");
+            }
+        })
+    }});
+
+    function typeFormatter(data){
+        if(data)
+            return '总店';
+        else
+            return '分店';
+    }
+
+    //默认查询当月数据
+    var firstMonthDay = new Date().Format("yyyy-MM-01");
+    $("input[name='startDate'").val(firstMonthDay);
+    $("#searchForm").submit();
+
+</script>
+</body>
+</html>

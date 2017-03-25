@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/plugins/webuploader/webuploader.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabs-container">
+                <div class="tab-content">
+                    <!-- 选项卡1-->
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="ibox-content">
+                            <form class="form-horizontal" id="signupForm" method="post">
+                                <input type="hidden" name="id" >
+                                <input type="hidden" name="property" >
+                                <input type="hidden" name="name" >
+                                <div class="form-group m-t-lg">
+                                    #*<label class="col-sm-2 control-label">项类型：</label>
+                                    <div class="col-sm-4">
+                                        <select name="itemType" class="form-control" minlength="1" type="text" required>
+                                            <option value="0">数据项</option>
+                                            <option value="1">自定义文本</option>
+                                            <option value="2">分割线</option>
+                                        </select>
+                                    </div>*#
+                                    #*<label class="col-sm-2 control-label property-item">打印项：</label>
+                                    <div class="col-sm-4 property-item">
+                                        <select name="property" class="form-control property-item" minlength="1" type="text" required>
+                                            <option value="Category">单据类型</option>
+                                            <option value="Forward">错误转移标志</option>
+                                            <option value="TableNo">牌号标识</option>
+                                            <option value="DeskName">桌台名称</option>
+                                            <option value="BatchId">流水号</option>
+                                        </select>
+                                    </div>*#
+                                    <label class="col-sm-2 control-label">别名：</label>
+                                    <div class="col-sm-4">
+                                        <input name="title" class="form-control" type="text" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">宽度：</label>
+                                    <div class="col-sm-4">
+                                        <input name="width" class="form-control" type="text" number="true" min="0"  disabled="disabled">
+                                    </div>
+                                    <label class="col-sm-2 control-label">格式：</label>
+                                    <div class="col-sm-4">
+                                        <select name="formatter" class="form-control" minlength="1" type="text"  disabled="disabled">
+                                            <option value="">无</option>
+                                            <option value="0">保留0位小数</option>
+                                            <option value="0.0">保留1位小数</option>
+                                            <option value="0.00">保留2位小数</option>
+                                            <option value="yyyy/MM/dd">年/月/日</option>
+                                            <option value="yyyy-MM-dd">年-月-日</option>
+                                            <option value="HH:mm">时:分</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">超出处理：</label>
+                                    <div class="col-sm-4">
+                                        <select name="overflow" class="form-control" minlength="1" type="text"  disabled="disabled">
+                                            <option value="0">不截断</option>
+                                            <option value="1">左边截断</option>
+                                            <option value="2">右边截断</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 control-label">填充类型：</label>
+                                    <div class="col-sm-4">
+                                        <select name="fillType" class="form-control" minlength="1" type="text"  disabled="disabled">
+                                            <option value="0">向左</option>
+                                            <option value="1">向右</option>
+                                            <option value="2">居中</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">字体：</label>
+                                    <div class="col-sm-4">
+                                        <select name="fontFamily" class="form-control" minlength="1" type="text"  disabled="disabled">
+                                            <option>宋体</option>
+                                            <option>黑体</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 control-label">字体大小：</label>
+                                    <div class="col-sm-4">
+                                        <input name="fontSize" class="form-control" type="text" number="true" min="0"  disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">文本格式：</label>
+                                    <div class="col-sm-4">
+                                        <select name="textStyle" class="form-control" minlength="1" type="text"  disabled="disabled">
+                                            <option value="0">正常</option>
+                                            <option value="1">斜体</option>
+                                            <option value="2">粗体</option>
+                                            <option value="3">粗斜体</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 control-label">文本大小：</label>
+                                    <div class="col-sm-4">
+                                        <select name="textSize" class="form-control" minlength="1" type="text"  disabled="disabled">
+                                            <option value="0">正常</option>
+                                            <option value="1">倍宽</option>
+                                            <option value="2">倍高</option>
+                                            <option value="3">倍宽&倍高</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">是否加粗：</label>
+                                    <div class="col-sm-4">
+                                        <div class="radio i-checks">
+                                            <label>
+                                                <input type="radio" value="false" name="autoCut" checked disabled="disabled"> <i></i>否</label>
+                                            <label>
+                                                <input type="radio" value="true" name="autoCut" disabled="disabled"> <i></i>是</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group toolbar">
+                                    <div class="col-sm-7 col-sm-offset-5">
+                                        #if($oper != "look")
+                                        <button class="btn btn-primary" type="submit">提交</button>
+                                        #end
+                                        <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="$URL/asset/bk/my-selector.js?v=fdd"></script>
+#parse("templates/common/foot.vm")
+<script>
+    var parentTable = #if($zone==0)"#headItems"#elseif($zone==1)"#contentItems"#elseif($zone==2)"#tailItems"#else""#end;
+
+    $(document).ready(function () {
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+    });
+
+    $("select[name='itemType']").on("change", function(){
+        var itemType = $(this).val();
+        itemTypeInputBind(itemType);
+    })
+
+    //加载上层编辑的数据
+    if("add" != "$oper"){
+        var parentEditObj = parent.Global.editObj;
+        console.log(parentEditObj)
+        itemTypeInputBind(parentEditObj.itemType);
+        iniDataToForm(parentEditObj, function(){
+            for (var data in parentEditObj) {
+                if(!isNull(parentEditObj[data])){
+                    $("input[name=" + data + "]").removeAttr("disabled"). attr("required");
+                    $("select[name=" + data + "]").removeAttr("disabled"). attr("required");
+                }
+            }
+        });
+    }
+
+    //初始化表单
+    $("#signupForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("signupForm");
+        layer.load();
+        if("add" == "$oper"){
+            var parentData =  parent.$(parentTable).bootstrapTable("getData");
+            var id = generateIdFromCurrentArray(parentData);
+            formData.id = id;
+            parent.$(parentTable).bootstrapTable("append", formData);
+        }else {
+            var parentData = parent.$(parentTable).bootstrapTable("getData");
+            console.log(parentData)
+            jQuery.each(parentData, function(i, item){
+                if(item.id == formData.id){
+                    parentData[i] = formData;
+                }
+            })
+            parent.$(parentTable).bootstrapTable("load", parentData);
+        }
+        closeCurrentLayerPage();
+    }});
+
+    function itemTypeInputBind(itemType){
+        if(itemType == 0){
+            $(".property-item").removeClass("hidden").removeAttr("disabled");
+        }else {
+            $(".property-item").attr("disabled", "disabled").addClass("hidden");
+        }
+    }
+
+</script>
+
+</body>
+</html>

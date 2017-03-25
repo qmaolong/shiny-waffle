@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>门店列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+
+        <div class="ibox-content">
+            <div class="row row-lg">
+
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <table id="table" >
+                                <thead>
+                                <tr>
+##                                    <th data-field="state" data-checkbox="true"></th>
+                                    <th data-field="encodeId" data-sortable="true">门店编号</th>
+                                    <th data-field="name">名称</th>
+                                    <th data-field="superFlag"  data-formatter="typeFormatter">类型</th>
+                                    <th data-field="ownerName">店长</th>
+                                    <th data-field="address">地址</th>
+                                    <th data-field="action" class="col-xs-2" data-formatter="actionFormatter" data-events="actionEvents">点击切换</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+#parse("templates/common/foot.vm")
+<script type="text/javascript">
+    $("#table").bootstrapTable({
+        url: "$URL/merchant/shopList",
+        responseHandler : "responseHandler"
+    });
+
+    function typeFormatter(data){
+        if(data)
+            return '总店';
+        else
+            return '分店';
+    }
+
+    function actionFormatter(value, row, index){
+        return ["<a class='btn btn-success btn-rounded btn-sm switch-shop' href='javascript:void(0)'>切换至该门店</a>",
+        ].join('');
+    }
+
+    window.actionEvents = {
+        'click .switch-shop': function (e, value, row, index) {
+            top.layer.load();
+            jQuery.ajax({
+                url : '$URL/merchant/switchShop',
+                type : 'post',
+                data : {dataStr: JSON.stringify(row)},
+                success : function(res){
+                    if(res.resultCode == 'SUCCESS'){
+                        parent.layer.msg("操作成功！", {time : 1000}, function(){
+                            top.location.href = "$URL/merchant/main";
+                        });
+                    }else {
+                        layer.alert(res.errCodeDesc);
+                        layer.closeAll("loading");
+                    }
+                }
+            })
+        },
+    };
+
+</script>
+</body>
+</html>

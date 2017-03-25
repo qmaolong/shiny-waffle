@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信绑定</title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+</head>
+
+<body class="gray-bg">
+
+<div class="lock-word animated fadeInDown">
+</div>
+<div class="middle-box text-center lockscreen animated fadeInDown">
+    <div>
+        <div class="m-b-md">
+            <img alt="image" class="img-circle circle-border" src="${userWeiXin.headimgurl}" onerror="this.onerror=null;this.src='/asset/bk/img/default-user.jpg'">
+        </div>
+        <h3>未绑定账号</h3>
+        <p>请输入AuthKey或者商家提供的授权码</p>
+        <form class="m-t" role="form" action="$URL/merchant/bindUser">
+            <div class="form-group">
+                <input type="text" name="code" class="form-control" required="">
+            </div>
+            <button type="submit" class="btn btn-primary block full-width">绑定</button>
+            <div class="form-group m-t-lg">
+                <label>没有授权码？<a href="$URL/merchant/regist">点击注册试用</a> </label>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+</body>
+</html>

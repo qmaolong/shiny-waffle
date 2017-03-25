@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>券列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+
+        <div class="ibox-content">
+            <div class="row row-lg">
+
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <div id="toolbar" class="btn-group">
+                                #*<button type="button" class="btn btn-default add">
+                                    <i class="glyphicon glyphicon-plus"></i>&nbsp;新增券
+                                </button>
+                                <button type="button" class="btn btn-default" id="generateCoupons">
+                                    <i class="fa fa-newspaper-o"></i>&nbsp;批量生成
+                                </button>
+                                <button type="button" class="btn btn-default" id="importCoupons">
+                                    <i class="glyphicon glyphicon-import"></i>&nbsp;批量导入
+                                </button>*#
+                                <button type="button" class="btn btn-default edit">
+                                    <i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑
+                                </button>
+                                <button type="button" class="btn btn-default look">
+                                    <i class="glyphicon glyphicon-search"></i>&nbsp;查看
+                                </button>
+                                <button type="button" class="btn btn-default closeFrame" id="closeLayer">
+                                    <i class="glyphicon glyphicon-remove"></i>&nbsp;关闭
+                                </button>
+                            </div>
+                            <table id="table" data-height="580"
+                                   data-toggle="table"
+                                   data-striped="true"
+                                   data-query-params="queryParams"
+                                   data-pagination="true"
+                                   data-search="true"
+                                   data-show-refresh="true"
+                                   data-show-toggle="true"
+                                   data-show-columns="true"
+                                   data-page-list="[5, 10, 20, 50, 100, 200]"
+                                   data-page-size="10"
+                                   data-toolbar="#toolbar" data-mobile-responsive="true"
+                                   data-show-export="true"
+                                   data-export-data-type="all">
+                                <thead>
+                                <tr>
+##                                    <th data-field="state" data-checkbox="true"></th>
+##                                    <th data-formatter="Formatter.runningFormatter">序号</th>
+                                    <th data-field="tagId" data-sortable="true">编号</th>
+                                    <th data-field="objectIdStr" data-visible="false">卡号</th>
+                                    <th data-field="name">名称</th>
+                                    <th data-field="balance">券金额</th>
+                                    <th data-field="cardState" data-formatter="Formatter.couponState">状态</th>
+                                    <th data-field="createTime" data-formatter="Formatter.time">生成时间</th>
+                                    <th class="col-xs-1" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/plugins/layer/layer.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/jquery-ui-1.10.4.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/bootstrap-table-export.js?v=1"></script>
+<script src="$URL/asset/bk/js/tableExport.js"></script>
+#parse("templates/common/foot.vm")
+<script type="text/javascript">
+    $("#table").bootstrapTable({
+        url: "$URL/merchant/admin/coupon/getBatchCoupons?batchId=$!batchId",
+        responseHandler : "responseHandler"
+    });
+
+    initEdit({
+        addButton : ".add",
+        editButton : ".edit",
+        lookButton : ".look",
+        layerType : 2,
+        hiddenTitle:true,
+        content : "$URL/merchant/admin/coupon/couponInput",
+        editUrl : "$URL/merchant/admin/coupon/couponEdit",
+        area : ['90%', '360px']
+    })
+
+    function actionFormatter(value, row, index){
+        var buttons = [];
+        if(row.cardState==0){
+            buttons.push("<a class='btn btn-primary btn-xs activate-card' href='javascript:void(0)'>点击激活</a>");
+        }else if(row.cardState<3){
+            buttons.push("<a class='btn btn-success btn-xs disable-card' href='javascript:void(0)'>点击作废</a>");
+        }
+        return buttons.join('');
+    }
+    window.actionEvents = {
+        'click .disable-card': function (e, value, row, index) {//激活卡
+            layer.confirm('确定作废？', {
+                btn: ['作废','取消'] //按钮
+            }, function(){
+                jQuery.ajax({
+                    url : '$URL/merchant/admin/coupon/disableCoupon',
+                    data : {tagId : row.tagId},
+                    type : "post",
+                    success : function(data){
+                        if(data.resultCode == 'SUCCESS'){
+                            layer.msg("已作废")
+                            $("button[name='refresh']").click();
+                        }else {
+                            layer.alert(data.errCodeDesc);
+                        }
+                    }
+                })
+            }, function(){
+                layer.closeAll("dialog");
+            });
+        },
+        'click .activate-card': function (e, value, row, index) {//激活卡
+            layer.confirm('确定激活？', {
+                btn: ['激活','取消'] //按钮
+            }, function(){
+                jQuery.ajax({
+                    url : '$URL/merchant/admin/coupon/activateCoupon',
+                    data : {tagId : row.tagId},
+                    type : "post",
+                    success : function(data){
+                        if(data.resultCode == 'SUCCESS'){
+                            layer.msg("激活成功")
+                            $("button[name='refresh']").click();
+                        }else {
+                            layer.alert(data.errCodeDesc);
+                        }
+                    }
+                })
+            }, function(){
+                layer.closeAll("dialog");
+            });
+        }
+    };
+
+
+    $("#importCoupons").on("click", function(){
+        layer.open({
+            title:"批量导入券",
+            type: 2,
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['90%', '550px'],
+            shadeClose: true, //开启遮罩关闭
+            content: '$URL/merchant/admin/coupon/importCouponsForm',
+            end: function () {
+                $("button[name='refresh']").click();
+            },
+            success : function(layero, index){
+            }
+        })
+    })
+
+    $("#generateCoupons").on("click", function(){
+        layer.open({
+            title:"批量生成券",
+            type: 2,
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['90%', '550px'],
+            shadeClose: true, //开启遮罩关闭
+            content: '$URL/merchant/admin/coupon/generateCouponsForm',
+            end: function () {
+                $("button[name='refresh']").click();
+            },
+            success : function(layero, index){
+            }
+        })
+    })
+
+</script>
+</body>
+</html>

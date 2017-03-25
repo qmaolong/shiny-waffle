@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>门店列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+
+        <div class="ibox-content">
+            <div class="row row-lg">
+
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <div id="toolbar" class="btn-group">
+                            </div>
+                            <table id="table" data-height="700"
+                                   data-toggle="table"
+                                   data-striped="true"
+                                   data-query-params="queryParams"
+                                   data-pagination="true"
+                                   data-search="true"
+                                   data-show-refresh="true"
+                                   data-show-toggle="true"
+                                   data-show-columns="true"
+                                   data-page-list="[5, 10, 20, 50, 100, 200]"
+                                   data-page-size="15"
+                                   data-toolbar="#toolbar" data-mobile-responsive="true"
+                                   data-show-export="true"
+                                   data-export-data-type="all">
+                                <thead>
+                                <tr>
+                                    <th data-field="time" data-formatter="Formatter.time">时间</th>
+                                    <th data-field="description">操作</th>
+                                    <th data-field="operator.name">操作者</th>
+                                    <th data-field="operationItem">操作项</th>
+                                    <th data-field="ip">IP</th>
+                                    <th data-field="success" data-formatter="Formatter.bool">成功</th>
+                                    <th data-field="failReason">失败原因</th>
+##                                    <th data-field="remark">备注</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+<script type="text/html" id="sort-content">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tabs-container">
+                    <div class="pull-right">
+                        <button class="btn btn-primary" type="submit" id="sortSubmit""><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;保存</button>
+                        <button class="btn btn-primary" type="button" id="closeLayer"><i class="glyphicon glyphicon-remove"></i>&nbsp;关闭</button>
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="active" id="tab-base"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 拖动排序</a>
+                        </li>
+                    </ul>
+                    <div class="col-sm-12">
+                        <div class="ibox-content">
+                            <table id="sortTable" data-height="360"
+                                   data-toggle="table"
+                                   data-striped="true">
+                                <thead>
+                                <tr>
+                                    <th data-field="time">时间</th>
+                                    <th data-field="description">操作</th>
+                                    <th data-field="operationItem">操作项</th>
+                                    <th data-field="ip">IP</th>
+                                    <th data-field="success">结果</th>
+                                    <th data-field="remark">备注</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</script>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/jquery-ui-1.10.4.min.js"></script>
+    #parse("templates/common/foot.vm")
+<script type="text/javascript">
+    $("#table").bootstrapTable({
+        url: "$URL/merchant/admin/setting/getOpLogs",
+        responseHandler : "responseHandler"
+    });
+
+    function imgFormatter(value, row) {
+        return '<img src="' + row.img + '" width="40px" onclick="viewImage(\'' + row.img + '\')"/>';
+    }
+
+    function viewImage(img) {
+        if(!isNull(img)){
+            top.layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: '800px',
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: '<img src="' + img + '">'
+            });
+        }
+    }
+
+    function operFormatter(value) {
+        return '<a class="btn btn-sm btn-white btn-bitbucket deleteEvent"> <i class="glyphicon glyphicon-trash"></i></a>';
+    }
+    initEdit({
+        name : "广告图片",
+        addButton : ".add",
+        deleteButton : ".delete",
+        lookButton : ".look",
+        layerType : 2,
+        content : "$URL/merchant/admin/setting/advertiseInput",
+        area : ['560px', '280px']
+    })
+
+    window.operEvents = {
+        'click .deleteEvent' : function (e, value, row, index) {//删除
+            layer.confirm('确认删除？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                    jQuery.ajax({
+                        url: "$URL/merchant/admin/setting/deleteAdvertise",
+                        data: {imgUrl: row.img},
+                        type: "post",
+                        success: function (data) {
+                            if (data.resultCode == "SUCCESS") {
+                                layer.msg("删除成功");
+                                $("button[name='refresh']").click();
+                            } else {
+                                layer.alert(data.errCodeDesc);
+                            }
+                        }
+                    })
+                }, function () {
+
+            });
+        }
+    }
+
+    $("#sort").on("click", function(){
+        layer.open({
+            title:"广告优先级排序",
+            type: 1,
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['860px', '460px'],
+            shadeClose: true, //开启遮罩关闭
+            content: $("#sort-content").html(),
+            end: function () {
+                $("button[name='refresh']").click();
+            },
+            success : function(layero, index){
+                $("#closeLayer").on("click", function(){
+                    layer.close(index);
+                })
+                $("#sortTable").bootstrapTable({
+                    url: "$URL/merchant/admin/setting/getAdvertise"
+                });
+                //初始化可排序事件
+                $( "#sortTable tbody" ).sortable();
+                $( "#sortTable tbody" ).disableSelection();
+                $( "#sortTable tbody" ).bind('sortupdate', function(event, ui) {
+                    tableSortRefresh("#sortTable");
+                });
+
+                $("#sortSubmit").on("click", function(){
+                    var formData = $("#sortTable").bootstrapTable("getData");
+                    jQuery.ajax({
+                        url: '$URL/merchant/admin/setting/sortAdvertise' ,
+                        type: 'POST',
+                        data: {dataStr : JSON.stringify(formData)},
+                        success: function (data) {
+                            if(data.resultCode == 'SUCCESS'){
+                                layer.msg("重新排序成功");
+                                layer.close(index);
+                            }else {
+                                layer.alert(data.errCodeDesc);
+                            }
+                        }
+                    });
+                })
+            }
+        })
+    })
+
+
+</script>
+</body>
+</html>

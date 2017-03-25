@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    #parse("templates/common/base-wx.vm")
+    <meta charset="utf-8">
+    <title>克维拉收银系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="/asset/wx/css/mui.min.css">
+    <link rel="stylesheet" href="/asset/wx/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/asset/wx/css/feedback.css" />
+</head>
+
+<body class="mui-fullscreen">
+<!--页面主结构开始-->
+<div id="app" class="mui-views">
+    <div class="mui-view">
+        <div class="mui-navbar">
+        </div>
+        <div class="mui-pages">
+        </div>
+    </div>
+</div>
+<!--页面主结构结束-->
+<!--单页面开始-->
+<div id="setting" class="mui-page">
+    <!--页面标题栏开始-->
+    <div class="mui-navbar-inner mui-bar mui-bar-nav">
+        #*<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+        </button>*#
+        <h1 class="mui-center mui-title">会员中心</h1>
+    </div>
+    <!--页面标题栏结束-->
+    <!--页面主内容区开始-->
+    <div class="mui-page-content">
+        <div class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+                <ul class="mui-table-view mui-table-view-chevron">
+                    <li class="mui-table-view-cell mui-media">
+                        <a class="mui-navigate-right" href="#account">
+                            <img class="mui-media-object mui-pull-left head-img" id="head-img" src="${user.headImgUrl}">
+                            <div class="mui-media-body">
+                                $!{user.nickName}
+                                <p class='mui-ellipsis'></p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="mui-content-padded">
+                    <h5>我的会员卡</h5>
+                    <div class="chart" style="min-height:100px;text-align:center;padding-top:30px">
+                        <div class="mui-content-padded">
+                            <p>
+                                暂无
+                            </p>
+                        </div>
+                    </div>
+                    <h5>我的优惠券</h5>
+                    <div class="chart" style="min-height:100px;text-align:center;padding-top:30px">
+                        <div class="mui-content-padded">
+                            <p>
+                                暂无
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--页面主内容区结束-->
+</div>
+<!--单页面结束-->
+
+</body>
+<script src='/asset/wx/js/zepto.min.js'></script>
+<script src="/asset/wx/js/mui.min.js "></script>
+<script src="/asset/wx/js/mui.view.js "></script>
+<script src='/asset/wx/js/feedback.js'></script>
+<script>
+    mui.init();
+    //初始化单页view
+    var viewApi = mui('#app').view({
+        defaultPage: '#setting'
+    });
+    //初始化单页的区域滚动
+    mui('.mui-scroll-wrapper').scroll();
+
+    document.getElementById("unbindMerchant").addEventListener('tap', function() {
+        var btnArray = ['否', '是'];
+        mui.confirm('后台扫码登录将失效，确认？', '解绑后台账号', btnArray, function(e) {
+            if (e.index == 1) {
+                Zepto.ajax({
+                    url : "/wx/user/unbindMerchant",
+                    data : {},
+                    type : "post",
+                    success : function (res) {
+                        if(res.resultCode == 'SUCCESS'){
+                            mui.toast("解绑成功！");
+                            setTimeout(function () {
+                                location.href = location.href;
+                            },2000);
+                        }else {
+                            mui.toast(res.errCodeDesc);
+                        }
+                    },
+                    error : function () {
+                        mui.toast("网络错误")
+                    }
+                })
+            } else {
+
+            }
+        })
+    });
+
+</script>
+
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    #parse("templates/common/base-wx.vm")
+    <meta charset="utf-8">
+    <title>门店数据统计</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="/asset/wx/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="/asset/wx/css/app.css" />
+    <link rel="stylesheet" type="text/css" href="/asset/wx/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="/asset/wx/css/merchant.css?v=123">
+    <style>
+        .chart {
+            height: 200px;
+            margin: 0px;
+            padding: 0px;
+        }
+        h5 {
+            margin-top: 30px;
+            font-weight: bold;
+        }
+        h5:first-child {
+            margin-top: 15px;
+        }
+        .mui-btn {
+            font-size: 16px;
+            padding: 8px;
+            margin: 3px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="mui-content">
+    <div class="mui-content-padded">
+        <form class="mui-input-group" id="form">
+                <div class="mui-input-row">
+                    <label>门店</label>
+                    #foreach($shop in $shops)
+                        #if($velocityCount==1||${shop.superFlag})
+                            #set($defaultShop = $shop)
+                        #end
+                    #end
+                    <input id='shopName' type="text" placeholder="请选择门店" value="${defaultShop.name}">
+                    <input id='shopId' name="shopId" type="hidden" value="${defaultShop.objectIdStr}">
+                </div>
+                <div class="mui-input-row">
+                    <label>开始日期</label>
+                    <input id='startDate' name="startDate" type="text" data-options='{"type":"date","beginYear":2016,"endYear":2017}' class="date-input" placeholder="请选择开始日期">
+                </div>
+                <div class="mui-input-row">
+                    <label>结束日期</label>
+                    <input id='endDate' name="endDate" type="text" data-options='{"type":"date","beginYear":2016,"endYear":2017}' class="mui-input-clear date-input" placeholder="请选择结束日期">
+                </div>
+        </form>
+    </div>
+    <div class="mui-content-padded">
+        <table style="width:100%;text-align:center;border:1px solid #ddd;border-spacing:0;border-collapse:collapse;color:#805d49">
+            <thead style="border-color:inherit">
+                <tr><th style="border:1px solid #ddd">营业收入</th><th style="border:1px solid #ddd">非营业收入</th><th style="border:1px solid #ddd">卡充值</th></tr>
+            </thead>
+            <tbody style="border:1px solid #ddd">
+                <tr><td id="businessIncome" style="border:1px solid #ddd">&yen;0</td><td id="extraIncome" style="border:1px solid #ddd">&yen;0</td><td id="cardChargeAmount" style="border:1px solid #ddd">&yen;0</td></tr>
+            </tbody>
+        </table>
+        <h5>订单类型统计</h5>
+        <div class="chart" id="echarts-order-type" style="border:1px solid #ddd"></div>
+        <h5>支付方式统计</h5>
+        <div class="chart" id="echarts-order-payment" style="border:1px solid #ddd"></div>
+        <h5>卡消费统计</h5>
+        <div class="chart" id="echarts-card" style="border:1px solid #ddd"></div>
+        <h5>券消费统计</h5>
+        <div class="chart" id="echarts-coupon" style="border:1px solid #ddd"></div>
+        <h5>折扣统计</h5>
+        <div class="chart" id="echarts-discount" style="border:1px solid #ddd"></div>
+    </div>
+</div>
+<script src='/asset/wx/js/zepto.min.js'></script>
+<script src="/asset/wx/js/mui.min.js"></script>
+<script src="/asset/wx/js/mui.picker.min.js"></script>
+<script src="/asset/wx/js/mui.poppicker.js"></script>
+<script src="/asset/wx/libs/echarts-all.js"></script>
+<script src="/asset/bk/common.js"></script>
+<script type="text/javascript" charset="utf-8">
+//设定初始值
+var today = new Date().Format("yyyy-MM-dd");
+var firstDay = new Date().Format("yyyy-MM-01");
+byId("startDate").value = firstDay;
+byId("endDate").value = today;
+
+(function(${dollor}) {
+    ${dollor}.init();
+
+    var userPicker = new ${dollor}.PopPicker();
+    userPicker.setData([#foreach($shop in $shops){text:"${shop.name}",value:"${shop.objectIdStr}"},#end]);
+    var shopNameButton = document.getElementById('shopName');
+    shopNameButton.addEventListener('tap', function(event) {
+        userPicker.show(function(items) {
+            shopNameButton.value = items[0].text;
+            byId("shopId").value = items[0].value;
+            getData();
+        });
+    }, false);
+
+    var btns = $('.date-input');
+    btns.each(function(i, btn) {
+        btn.addEventListener('tap', function() {
+            var optionsJson = this.getAttribute('data-options') || '{}';
+            var options = JSON.parse(optionsJson);
+            var id = this.getAttribute('id');
+            var picker = new ${dollor}.DtPicker(options);
+            picker.show(function(rs) {
+                btn.value=rs;
+                picker.dispose();
+                getData();
+            });
+        }, false);
+    });
+
+    getData();
+})(mui);
+
+function byId(id) {
+    return document.getElementById(id);
+};
+
+function getData() {
+    var formData = getDataFromForm("form")
+    Zepto.ajax({
+        url : "/wx/shop/getChartsData",
+        type: 'POST',
+        data: {dataStr : JSON.stringify(formData)},
+        success: function (res) {
+            $("#businessIncome").html("&yen;" + res.businessIncome);
+            $("#extraIncome").html("&yen;" + res.extraIncome);
+            $("#cardChargeAmount").html("&yen;" + res.chargeAmount);
+            initPageCharts(res);
+        },
+        error: function () {
+            alert("网络错误~");
+        }
+    })
+}
+
+//渲染图表
+function initPageCharts(data){
+    initOrderTypeCharts(data);
+    initPaymentCharts(data);
+    initCardCharts(data);
+    initCouponCharts(data);
+    initDiscountCharts(data);
+}
+
+function initOrderTypeCharts(data){
+    var orderTypeCharts = echarts.init(document.getElementById('echarts-order-type'));
+    orderTypeOption = {
+        title : {
+            text: '',
+            subtext: '',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient : 'vertical',
+            x : 'left',
+            data:['堂食','快餐','外卖']
+        },
+        toolbox: {
+            show : true,
+        },
+        calculable : true,
+        series : [
+            {
+                name:'金额',
+                type:'pie',
+                radius : '55%',
+                center: ['55%', '55%'],
+                data:[
+                    {value:data.deskOrderAmount, name:'堂食'},
+                    {value:data.fastOrderAmount, name:'快餐'},
+                    {value:data.takeOutAmount, name:'外卖'}
+                ],
+                itemStyle: {
+                    normal: {
+                        color: function(params) {
+                            // build a color map as your need.
+                            var colorList = [
+                                '#D7504B','#F4E001','#F0805A','#26C0C0'
+                            ];
+                            return colorList[params.dataIndex]
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter: '{b}\n{c}'
+                        }
+                    }
+                }
+            }
+        ]
+    };
+    orderTypeCharts.setOption(orderTypeOption);
+}
+
+function initPaymentCharts(data){
+    var orderPaymentCharts = echarts.init(document.getElementById('echarts-order-payment'));
+
+    orderPaymentOption = {
+        title : {
+            text: '',
+            subtext: '',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient : 'vertical',
+            x : 'left',
+            data:['现金','银行卡','储值卡','券','其他']
+        },
+        toolbox: {
+            show : true,
+        },
+        calculable : true,
+        series : [
+            {
+                name:'支付金额',
+                type:'pie',
+                radius : '55%',
+                center: ['55%', '55%'],
+                data:[
+                    {value:data.cashAmount, name:'现金'},
+                    {value:data.bankAmount, name:'银行卡'},
+                    {value:data.cardAmount, name:'储值卡'},
+                    {value:data.couponAmount, name:'券'},
+                    {value:data.otherAmount, name:'其他'}
+                ],
+                itemStyle: {
+                    normal: {
+                        color: function(params) {
+                            // build a color map as your need.
+                            var colorList = [
+                                '#9BCA63','#FAD860','#F3A43B','#60C0DD',
+                                '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+                            ];
+                            return colorList[params.dataIndex]
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter: '{b}\n{c}'
+                        }
+                    }
+                },
+            }
+        ]
+    };
+    orderPaymentCharts.setOption(orderPaymentOption);
+}
+
+function initCardCharts(data){
+    var orderCardCharts = echarts.init(document.getElementById('echarts-card'));
+
+    orderCardOption =  {
+        legend: {
+            data: []
+        },
+        grid: {
+            x: 45,
+            x2: 20,
+            y: 30,
+            y2: 25
+        },
+        toolbox: {
+            show: false,
+            feature: {
+                mark: {
+                    show: true
+                },
+                dataView: {
+                    show: true,
+                    readOnly: false
+                },
+                magicType: {
+                    show: true,
+                    type: ['line', 'bar']
+                },
+                restore: {
+                    show: true
+                },
+                saveAsImage: {
+                    show: true
+                }
+            }
+        },
+        calculable: false,
+        xAxis: [{
+            type: 'category',
+            data: ['卡充值', '卡消费', '退卡', '卡折扣']
+        }],
+        yAxis: [{
+            type: 'value',
+            splitArea: {
+                show: true
+            }
+        }],
+        series: [{
+            name: '降水量',
+            type: 'bar',
+            data: [data.chargeAmount,data.cardAmount,data.returnCardAmount,data.cardDiscountAmount],
+            itemStyle: {
+                normal: {
+                    color: function(params) {
+                        // build a color map as your need.
+                        var colorList = [
+                            '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+                            '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+                            '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+                        ];
+                        return colorList[params.dataIndex]
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{c}'
+                    }
+                }
+            },
+        }]
+    };
+    orderCardCharts.setOption(orderCardOption);
+}
+
+function initCouponCharts(data){
+    var orderCouponCharts = echarts.init(document.getElementById('echarts-coupon'));
+
+    orderCouponOption = {
+        legend: {
+            data: []
+        },
+        grid: {
+            x: 45,
+            x2: 20,
+            y: 30,
+            y2: 25
+        },
+        toolbox: {
+            show: false,
+            feature: {
+                mark: {
+                    show: true
+                },
+                dataView: {
+                    show: true,
+                    readOnly: false
+                },
+                magicType: {
+                    show: true,
+                    type: ['line', 'bar']
+                },
+                restore: {
+                    show: true
+                },
+                saveAsImage: {
+                    show: true
+                }
+            }
+        },
+        calculable: false,
+        xAxis: [{
+            type: 'category',
+            data: ['券抵用', '券折扣']
+        }],
+        yAxis: [{
+            type: 'value',
+            splitArea: {
+                show: true
+            }
+        }],
+        series: [{
+            name: '',
+            type: 'bar',
+            data: [data.couponAmount,data.couponDiscountAmount],
+            itemStyle: {
+                normal: {
+                    color: function(params) {
+                        // build a color map as your need.
+                        var colorList = [
+                            '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+                            '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+                            '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+                        ];
+                        return colorList[params.dataIndex]
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{c}'
+                    }
+                }
+            },
+        }]
+    };
+    orderCouponCharts.setOption(orderCouponOption);
+}
+
+function initDiscountCharts(data){
+    var orderDiscountCharts = echarts.init(document.getElementById('echarts-discount'));
+
+    orderDiscountOption = {
+        legend: {
+            data: []
+        },
+        grid: {
+            x: 45,
+            x2: 20,
+            y: 30,
+            y2: 25
+        },
+        toolbox: {
+            show: false,
+            feature: {
+                mark: {
+                    show: true
+                },
+                dataView: {
+                    show: true,
+                    readOnly: false
+                },
+                magicType: {
+                    show: true,
+                    type: ['line', 'bar']
+                },
+                restore: {
+                    show: true
+                },
+                saveAsImage: {
+                    show: true
+                }
+            }
+        },
+        calculable: false,
+        xAxis: [{
+            type: 'category',
+            data: ['整单折扣', '特殊折扣', '品项折扣']
+        }],
+        yAxis: [{
+            type: 'value',
+            splitArea: {
+                show: true
+            }
+        }],
+        series: [{
+            name:'折扣金额统计',
+            type: 'bar',
+            data: [data.discountAmount,data.specialDiscountAmount,data.itemDiscountAmount],
+            itemStyle: {
+                normal: {
+                    color: function(params) {
+                        // build a color map as your need.
+                        var colorList = [
+                            '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+                            '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+                            '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+                        ];
+                        return colorList[params.dataIndex]
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{c}'
+                    }
+                }
+            },
+        }]
+    };
+    orderDiscountCharts.setOption(orderDiscountOption);
+}
+</script>
+</body>
+
+</html>

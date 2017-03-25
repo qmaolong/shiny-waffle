@@ -1,0 +1,7 @@
+#set($URL = "$!{req.contextPath}")
+#set($TITLE = "克维拉收银系统")
+#set($timestamp = "$toolUtil.getVersionTimestamp()")
+#set($dollor="$")
+<script type="text/javascript">
+    var url = '$URL';
+</script>

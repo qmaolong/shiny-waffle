@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单位列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="tabs-container">
+        <div class="pull-right">
+            <button class="btn btn-primary" type="submit" id="submit""><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;保存</button>
+            <button class="btn btn-primary" type="button" id="closeLayer"><i class="glyphicon glyphicon-remove"></i>&nbsp;关闭</button>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="active" id="tab-base"><a data-toggle="tab" href="#tab-1" aria-expanded="true">预览</a>
+            </li>
+        </ul>
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <table id="table" data-height="700"
+                       data-toggle="table"
+                       data-striped="true"
+                       data-pagination="true"
+                       data-page-list="[5, 10, 20, 50, 100, 200]"
+                       data-page-size="15">
+                    <thead>
+                    <tr>
+                    ##                                    <th data-field="state" data-checkbox="true"></th>
+                        <th data-field="id">ID</th>
+                        <th data-field="name">名称</th>
+##                        <th data-field="cateName">小类</th>
+                        <th data-field="type" data-formatter="foodTypeFormatter">类型</th>
+                        <th data-field="price1">价格</th>
+                        <th data-field="foodState" data-formatter="foodStateFormatter">状态</th>
+                        <th data-formatter="actionFormatter" data-events="actionEvent">操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Panel Other -->
+
+    <!-- End Panel Other -->
+</div>
+<script type="text/html" id="edit-content">
+    <div class="tabs-container">
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane active">
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="signupForm" method="post">
+                        <input type="hidden" name="oper" value="$!oper">
+                        <input type="hidden" name="_id">
+                        <input type="hidden" name="type" value="$!type">
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label class="col-xs-3 control-label">打印机1：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printer1" name="printer1" class="form-control" minlength="1" type="text">
+                                        <option value="">无</option>
+                                        #foreach($printer in $printers)
+                                            <option value="$!{printer.name}" hassubinfo="true">$!{printer.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <label class="col-xs-3 control-label">打印机2：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printer2" name="printer2" class="form-control" minlength="1" type="text">
+                                        <option value="">无</option>
+                                        #foreach($printer in $printers)
+                                            <option value="$!{printer.name}" hassubinfo="true">$!{printer.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label class="col-xs-3 control-label">打印机3：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printer3" name="printer3" class="form-control" minlength="1" type="text">
+                                        <option value="">无</option>
+                                        #foreach($printer in $printers)
+                                            <option value="$!{printer.name}" hassubinfo="true">$!{printer.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <label class="col-xs-3 control-label">控菜打印机：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printerControl" name="printerControl" class="form-control" minlength="1" type="text">
+                                        <option value="">无</option>
+                                        #foreach($printer in $printers)
+                                            <option value="$!{printer.name}" hassubinfo="true">$!{printer.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label class="col-xs-3 control-label">厨打方案：</label>
+                                <div class="col-xs-8">
+                                    <select  id="printerPolicy" name="printerPolicy" class="form-control" minlength="1" type="text">
+                                        <option value="">无</option>
+                                        #foreach($printerPolicy in $printerPolicies)
+                                            <option value="$!{printerPolicy.name}" hassubinfo="true">$!{printerPolicy.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-7 col-sm-offset-5">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                                <button class="btn btn-primary closeLayer" type="button">关闭</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+#parse("templates/common/foot.vm")
+<script type="text/javascript">
+    $("#table").bootstrapTable({
+        data: parent.quoteFoods
+    });
+
+    function actionFormatter(){
+        return ['<a class="btn btn-sm btn-white btn-bitbucket editEvent"> <i class="glyphicon glyphicon-pencil"></i></a>',
+            '<a class="btn btn-sm btn-white btn-bitbucket deleteEvent"> <i class="glyphicon glyphicon-trash"></i></a>'].join("&nbsp;&nbsp;");
+    }
+
+    window.actionEvent = {
+        'click .editEvent': function (e, value, row, index) {//编辑
+            var layerIndex = layer.open({
+                title: "编辑",
+                type: 1,
+                skin: 'layui-layer-demo', //样式类名
+                closeBtn: 1, //不显示关闭按钮
+                shift: 2,
+                maxmin: true,
+                moveOut: true,
+                area: ["90%", "420px"],
+                shadeClose: false, //开启遮罩关闭
+                content: $("#edit-content").html(),
+                end: function () {
+                    $("button[name='refresh']").click()
+                },
+                success: function (layero, layerIndex) {
+                    iniDataToForm(row);
+                    $("#signupForm").validate({
+                        submitHandler: function () {
+                            var formData = getDataFromForm("signupForm");
+                            for (var x in formData){
+                                row[x] = formData[x];
+                            }
+                            $("#table").bootstrapTable("updateRow",{
+                                index : index,
+                                row : row
+                            })
+                            layer.close(layerIndex);
+                        }
+                    });
+                    $(".closeLayer").on("click", function () {
+                        layer.close(layerIndex);
+                    })
+                }
+            });
+        },
+        'click .deleteEvent': function (e, value, row, index) {//删除
+            $("#table").bootstrapTable("remove", {
+                field : "id",
+                values : [row.id]
+            })
+        }
+    };
+
+    function foodTypeFormatter(value){
+        if(value==1){
+            return "套餐";
+        }else {
+            return "单品";
+        }
+    }
+
+    function foodStateFormatter(value) {
+        if(value ==1){
+            return "不可用";
+        }else {
+            return "可用";
+        }
+    }
+
+    $("#submit").on("click", function () {
+        var foods = $("#table").bootstrapTable("getData");
+        var config = parent.quoteConfig;
+        if (isNull(foods)){
+            layer.msg("菜品不得为空！");
+        }
+        layer.load();
+        jQuery.ajax({
+            url : '$URL/merchant/admin/food/quoteFromSuperSubmit',
+            type : 'post',
+            data : {foodStr : JSON.stringify(foods), configStr : JSON.stringify(config)},
+            success : function (res) {
+                if(res.resultCode == 'SUCCESS'){
+                    layer.msg("操作成功！");
+                    layer.closeAll("loading");
+                    closeCurrentLayerPage();
+                }else {
+                    layer.alert(res.errCodeDesc);
+                    layer.closeAll("loading");
+                }
+            }
+        })
+    })
+
+</script>
+</body>
+</html>

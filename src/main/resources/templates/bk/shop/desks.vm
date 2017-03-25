@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桌位管理</title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/jsTree/style.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>房间列表</small></h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <div id="jstree1">
+                        <ul>
+                            <li class="jstree-open"  data-jstree='{"type":"top"}'>房间
+                                <ul>
+                                    #foreach($room in $!{roomsList})
+                                    <li #if($velocityCount == 1)class="jstree-clicked"#end onclick="refreshChildren('$!{room.id}', '$!{room.name}')" data-jstree='{"type":"second"}'>
+                                        $!{room.id}-$!{room.name}
+                                    </li>
+                                    #end
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <!-- Example Events -->
+            <div class="example-wrap">
+                <div class="ibox-content">
+                    <div id="toolbar" class="btn-group">
+                        <button type="button" class="btn btn-default add">
+                            <i class="glyphicon glyphicon-plus"></i>&nbsp;新建
+                        </button>
+                        #*<button type="button" class="btn btn-default edit">
+                            <i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑
+                        </button>
+                        <button type="button" class="btn btn-default delete">
+                            <i class="glyphicon glyphicon-trash"></i>&nbsp;删除
+                        </button>
+                        <button type="button" class="btn btn-default look">
+                            <i class="glyphicon glyphicon-search"></i>&nbsp;查看
+                        </button>*#
+                        #*<button type="button" class="btn btn-default closeFrame">
+                            <i class="glyphicon glyphicon-remove"></i>&nbsp;关闭
+                        </button>*#
+                    </div>
+                    <table id="table" data-height="700"
+                           data-toggle="table"
+                           data-striped="true"
+                           data-query-params="queryParams"
+                           data-pagination="true"
+                           data-search="true"
+                           data-show-refresh="true"
+                           data-show-toggle="true"
+                           data-show-columns="true"
+                           data-page-list="[5, 10, 20, 50, 100, 200]"
+                           data-page-size="15"
+                           data-toolbar="#toolbar" data-mobile-responsive="true"
+                           data-show-export="true"
+                           data-export-data-type="all">
+                        <thead>
+                        <tr>
+                        ##                                    <th data-field="state" data-checkbox="true"></th>
+                            <th data-field="id">ID</th>
+                            <th data-field="name">名称</th>
+                            <th data-field="category">桌型</th>
+                            <th data-field="minPay">最低消费</th>
+                            <th data-field="srvFee">服务费</th>
+                            <th data-formatter="rudFormatter" data-events="rudEvents">操作</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="edit-content">
+    <div class="tabs-container">
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane active">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm" method="post">
+                        <input type="hidden" name="oper" value="#if($!{shop})edit#elseif(true)add#end">
+                        <input type="hidden" name="id" value="$!{shop.id}">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">房间：</label>
+                                <div class="col-sm-8">
+                                    <select  id="parentId" name="parentId" class="form-control" minlength="1" type="text" required>
+                                        #foreach($room in $!roomsList)
+                                        <option value="$!{room.id}" #if($velocityCount==1)selected#end>$!{room.name}</option>
+                                        #end
+                                    </select>
+                                    #if(!$!roomsList)
+                                        <span class="help-block">尚未添加区域，<a href="$URL/merchant/admin/shop/rooms" class="J_menuItem">打开区域管理</a> </span>
+                                    #end
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">名称：</label>
+                                <div class="col-sm-8">
+                                    <input id="name" name="name" class="form-control" minlength="1" type="text" required >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">桌型：</label>
+                                <div class="col-sm-8">
+                                    <select  id="category" name="category" class="form-control" minlength="1" type="text" required>
+                                        #foreach($deskCat in $!deskCatList)
+                                            <option  #if($velocityCount==1)selected#end>$!{deskCat.name}</option>
+                                        #end
+                                    </select>
+                                    #if(!$!deskCatList)
+                                        <span class="help-block">尚未添加桌型，<a href="$URL/merchant/admin/shop/rooms" class="J_menuItem">打开桌型管理</a> </span>
+                                    #end
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">最低消费：</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input id="minPay" name="minPay" class="form-control" type="text" number="true" value="0"><span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">服务费：</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input id="srvFee" name="srvFee" class="form-control" type="text" number="true" value="0"><span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-7 col-sm-offset-5">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                                <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/content.min.js?v=1.0.0"></script>
+<script src="$URL/asset/bk/js/plugins/jsTree/jstree.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/plugins/layer/layer.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/bootstrap-table-export.js?v=$timestamp"></script>
+<script src="$URL/asset/bk/js/tableExport.js"></script>
+#parse("templates/common/foot.vm")
+<style>
+    .jstree-open>.jstree-anchor>.fa-folder:before{content:"\f07c"}.jstree-default .jstree-icon.none{width:0}
+</style>
+<script>
+    #if(${roomsList.size()}>0 && $!{roomsList.get(0)})
+        #set($firstRoom=$!{roomsList.get(0)})
+    #end
+    var localRoomId = "$!{firstRoom.id}";
+    var localRoomName = "$!{firstRoom.name}";
+    $(document).ready(function () {
+        $("#jstree1").jstree({
+            "core": {"check_callback": true},
+            "plugins": ["types", "dnd"],
+            "types": {
+                "default": {"icon": "fa fa-tag"},
+                "top": {"icon": "glyphicon glyphicon-menu-hamburger"},
+                "second" : {"icon": "glyphicon glyphicon-stop"},
+                "third" : {"icon": "glyphicon glyphicon-triangle-right"}
+            }
+        });
+    });
+
+    $("#table").bootstrapTable({
+        url: "$URL/merchant/admin/shop/getDesksList?roomId=$!{firstRoom.id}",
+        responseHandler : "responseHandler"
+    });
+
+    function refreshChildren(roomId, roomName){
+        $("input[class='form-control']").val(roomName);
+        localRoomName = roomName;
+        localRoomId = roomId;
+        $("#table").bootstrapTable('refresh', {url: '$URL/merchant/admin/shop/getDesksList?roomId=' + roomId});
+    }
+
+    function currentCateName(){
+        return localRoomName;
+    }
+
+    function getCurrentCateId(){
+        return localRoomId;
+    }
+
+    //初始化增删改查配置
+    initEdit({
+        name : "桌位",
+        addButton : ".add",
+        editButton : ".edit",
+        deleteButton : ".delete",
+        lookButton : ".look",
+        editUrl : "$URL/merchant/admin/shop/editDesks",
+        area : ['80%', '460px'],
+        afterInitAddContent : function(){
+            $("select[name='parentId']").val(getCurrentCateId());
+        },
+        afterInitEditContent : function(){
+            $("select[name='parentId']").val(getCurrentCateId());
+            $("select[name='parentId']").attr("disabled", "disabled");
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员卡列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <style>
+        .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+            padding-right: 10px;
+            padding-left: 10px
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>条件筛选</h5>
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+                <a class="close-link">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content" style="min-height:112px">
+            <form class="form-horizontal" id="searchForm">
+                <div class="col-sm-11 b-r m-t-sm">
+                    <div class="form-group" style="margin-bottom:4px">
+                        <label class="col-sm-1 control-label">编号:</label>
+                        <div class="col-sm-3">
+                            <input name="tagId" class="form-control" type="text"/>
+                        </div>
+                        <label class="col-sm-1 control-label">会员名:</label>
+                        <div class="col-sm-3">
+                            <input name="memberName" class="form-control" type="text"/>
+                        </div>
+                        <label class="col-sm-1 control-label">手机号:</label>
+                        <div class="col-sm-3">
+                            <input name="tel" class="form-control" type="text"/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:2px">
+                        <label class="col-sm-1 control-label">性别:</label>
+                        <div class="col-sm-3">
+                            <select name="sex" class="form-control" minlength="1" type="text">
+                                <option value="">全部</option>
+                                <option value="1">男</option>
+                                <option value="2">女</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label">类型:</label>
+                        <div class="col-sm-3">
+                            <select name="cardTypeId" class="form-control" minlength="1" type="text">
+                                <option value="">全部</option>
+                                #foreach($cardType in $cardTypes)
+                                    <option value="$cardType.get_id()">$!{cardType.name}</option>
+                                #end
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="form-group text-center m-t-md">
+                        <button class="btn btn-success btn-sm" type="submit">&nbsp;筛选&nbsp;</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+
+        <div class="ibox-content">
+            <div class="row row-lg">
+
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div class="example-wrap">
+                        <div class="example">
+                            <div id="toolbar" class="btn-group">
+                                <button type="button" class="btn btn-default" id="cardCharge">
+                                    <i class="glyphicon glyphicon-yen"></i>&nbsp;卡充值
+                                </button>
+                                <button type="button" class="btn btn-default" id="sendCoupon2Card">
+                                    <i class="fa fa-gift"></i>&nbsp;发放券
+                                </button>
+                            </div>
+                            <table id="table" data-height="700"
+                                   data-toggle="table"
+                                   data-striped="true"
+                                   data-query-params="queryParams"
+                                   data-pagination="true"
+                                   data-show-refresh="true"
+                                   data-show-toggle="true"
+                                   data-show-columns="true"
+                                   data-page-list="[5, 10, 20, 50, 100, 200]"
+                                   data-page-size="10"
+                                   data-toolbar="#toolbar" data-mobile-responsive="true"
+                                   data-show-export="true"
+                                   data-export-data-type="all">
+                                <thead>
+                                <tr>
+                                    <th data-field="tagId" data-sortable="true">编号</th>
+                                    <th data-field="objectIdStr" data-visible="false">卡号</th>
+                                    <th data-field="memberName">会员名</th>
+                                    <th data-field="sex" data-formatter="Formatter.sex">性别</th>
+                                    <th data-field="balance" data-formatter="Formatter.scale">余额</th>
+                                    <th data-field="point">积分</th>
+                                    <th data-formatter="cardsFormatter" data-events="rudEvents">操作</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+<script type="text/html" id="charge-content">
+    <div class="tabs-container" style="width:88%">
+        <div class="tab-content">
+            <form class="form-horizontal" id="chargeForm"  method="post">
+                <input type="hidden" id="tagId" name="tagId" >
+                <input type="hidden" id="objectIdStr" name="objectIdStr" >
+                <div class="form-group m-t-lg">
+                    <label class="col-sm-4 control-label">会员卡编号：</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static" id="tagIdText"></p>
+                    </div>
+                </div>
+                <div class="form-group m-t-lg">
+                    <label class="col-sm-4 control-label">余额：</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static" id="balance"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">充值金额：</label>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <input type="text" name="chargeAmount" class="form-control" number="true" required> <span class="input-group-addon">元</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-5 m-t-lg">
+                        <button class="btn btn-primary" type="submit">提交</button>
+                        <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/plugins/layer/layer.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/jquery-ui-1.10.4.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/bootstrap-table-export.js?v=1"></script>
+<script src="$URL/asset/bk/js/tableExport.js"></script>
+#parse("templates/common/foot.vm")
+<script type="text/javascript">
+    $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+
+    $("#table").bootstrapTable({
+        data : []
+    });
+
+    initEdit({
+        addButton : ".add",
+        editButton : ".edit",
+        lookButton : ".look",
+        layerType : 2,
+        name : "微会员",
+        content : "$URL/merchant/admin/card/cardInput",
+        editUrl : "$URL/merchant/admin/card/cardEdit",
+        area : ['90%', '490px'],
+        afterClose : function () {
+            $("#searchForm").submit();
+        }
+    })
+
+    //充值
+    $("#cardCharge").on("click", function () {
+        var selectedData = getSelectedRow("#table");
+        layer.prompt({
+            title: '输入要充值的卡编号',
+            value: undefined == selectedData ? '' : selectedData.tagId,
+            formType: 0 //prompt风格，支持0-2
+        }, function (tagId) {
+            jQuery.ajax({
+                url: "$URL/merchant/admin/card/getCardInfo?tagId=" + tagId,
+                type: "post",
+                success: function (res) {
+                    if (res.resultCode == "SUCCESS") {
+                        layer.closeAll("dialog");
+                        layer.open({
+                            title: "卡充值",
+                            type: 1,
+                            closeBtn: 1, //不显示关闭按钮
+                            shift: 2,
+                            maxmin: true,
+                            area: ['620px', '360px'],
+                            shadeClose: true, //开启遮罩关闭
+                            content: $("#charge-content").html(),
+                            end: function () {
+                                $("button[name='refresh']").click();
+                            },
+                            success: function (layero, index) {
+                                var cardInfo = res.result;
+                                console.log(cardInfo)
+                                $("#tagId").val(cardInfo.tagId);
+                                $("#objectIdStr").val(cardInfo.objectIdStr);
+                                $("#tagIdText").html(cardInfo.tagId);
+                                $("#balance").html(cardInfo.balance + "元");
+
+                                $("#chargeForm").validate({
+                                    submitHandler: function () {
+                                        submitEvent("$URL/merchant/admin/card/cardCharge", index, "", "chargeForm", function (data) {
+                                            if (data.errcode == 0) {
+                                                var successMsg = '充值成功！<br/>流水号：' + data.seriesNumber + '<br>上次剩余' + data.lastBalance + '，充值：' + data.chargeAmount + '，赠送金额' + data.giftAmount + '，现余额' + data.curBalance;
+                                                layer.alert(successMsg, {
+                                                    skin: 'layui-layer-lan'
+                                                    , closeBtn: 0
+                                                    , shift: 4 //动画类型
+                                                }, function () {
+                                                    layer.close(index);
+                                                    layer.closeAll("dialog");
+                                                });
+                                                layer.closeAll("loading");
+                                            } else {
+                                                layer.alert(data.msg);
+                                                layer.closeAll("loading");
+                                            }
+                                        });
+                                    }
+                                });
+                                $("#closeLayer").on("click", function () {
+                                    layer.close(index);
+                                })
+                            }
+                        })
+                    } else {
+                        layer.msg(res.errCodeDesc)
+                    }
+                }
+            })
+        });
+    })
+
+    function cardsFormatter(){
+        return ['<a class="btn btn-sm btn-white btn-bitbucket searchEvent"> <i class="glyphicon glyphicon-search"></i></a>',
+            '<a class="btn btn-sm btn-white btn-bitbucket editEvent"> <i class="glyphicon glyphicon-pencil"></i></a>'].join("&nbsp;&nbsp;");
+    }
+    
+    $("#sendCoupon2Card").on("click", function () {
+        layer.open({
+            title:"定向发放券",
+            type: 2,
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['85%', '520px'],
+            shadeClose: true, //开启遮罩关闭
+            content: "$URL/merchant/admin/card/sendCoupon2Card",
+            end: function () {
+                $("button[name='refresh']").click();
+            },
+            success : function(layero, index){
+
+            }
+        })
+    })
+
+    //初始化筛选表单
+    $("#searchForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("searchForm");
+        layer.load();
+        jQuery.ajax({
+            url : "$URL/merchant/admin/card/getWeixinMembers",
+            data : {dataStr : JSON.stringify(formData)},
+            type : "get",
+            success : function(res){
+                $("#table").bootstrapTable('load',{
+                    data : responseHandler(res)
+                });
+                layer.closeAll("loading");
+            }
+        })
+    }});
+
+</script>
+</body>
+</html>

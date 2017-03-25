@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title></title>
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/plugins/webuploader/webuploader.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabs-container">
+                <div class="tab-content">
+                    <!-- 选项卡1-->
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="ibox-content">
+                            <form class="form-horizontal" id="signupForm" method="post">
+                                <input type="hidden" name="createTime" >
+                                <input type="hidden" name="creator" >
+                                <div class="form-group m-t-lg">
+                                    <label class="col-sm-2 control-label">设备名称：</label>
+                                    <div class="col-sm-4">
+                                        <input name="name" class="form-control" type="text" required #if($oper=='edit')readonly="true"#end>
+                                    </div>
+                                    <label class="col-sm-2 control-label">厨打模式：</label>
+                                    <div class="col-sm-4">
+                                        <select name="mode" class="form-control" minlength="1" type="text" required>
+                                            <option value="0">每台一单</option>
+                                            <option value="1">每菜一单</option>
+                                            <option value="2">台单+明细</option>
+                                            <option value="3">每大类一单</option>
+                                            <option value="4">每小类一单</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">打印接口：</label>
+                                    <div class="col-sm-4">
+                                        <select name="driverType" class="form-control" minlength="1" type="text" required>
+                                            <option value="0">本地打印机</option>
+                                            <option value="1">网络打印机</option>
+                                            <option value="2">串口打印机</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 control-label">打印份数：</label>
+                                    <div class="col-sm-4">
+                                        <select name="copies" class="form-control" minlength="1" type="text" required>
+                                            <option value="1">一份</option>
+                                            <option value="2">两份</option>
+                                            <option value="3">三份</option>
+                                            <option value="4">四份</option>
+                                            <option value="5">五份</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">错误转移：</label>
+                                    <div class="col-sm-4">
+                                        <select name="errorForward" class="form-control" type="text">
+                                            <option value="">无</option>
+                                            #foreach($printer in $printers)
+                                                #if(${printer.id}!=$id)
+                                                    <option value="">$!{printer.name}</option>
+                                                #end
+                                            #end
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">厨打格式：</label>
+                                    <div class="col-sm-4">
+                                        <select name="kitchenForm" class="form-control"type="text">
+                                            <option value="">无</option>
+                                            #foreach($form in $kitchenForms)
+                                                <option >$!{form.name}</option>
+                                            #end
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 control-label">控菜格式：</label>
+                                    <div class="col-sm-4">
+                                        <select name="controlForm" class="form-control" type="text">
+                                            <option value="">无</option>
+                                            #foreach($form in $controlForms)
+                                                <option >$!{form.name}</option>
+                                            #end
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">驱动列表：</label>
+                                    <div class="col-sm-4">
+                                        <input name="driverName" id="driverLocal" class="form-control" type="text" readonly="true">
+                                        <select name="driverId" id="driverOnline" class="form-control hidden" disabled="disabled">
+                                            <option value="0">标准网络驱动</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 control-label">蜂鸣提示：</label>
+                                    <div class="col-sm-4">
+                                        <select name="beep" class="form-control" minlength="1" type="text" required>
+                                            <option value="0">不提示</option>
+                                            <option value="1">打印前提示</option>
+                                            <option value="2">打印后提示</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group online-printer">
+                                    <label class="col-sm-2 control-label">串口端口：</label>
+                                    <div class="col-sm-4">
+                                        <input name="comPort" class="form-control serial-printer" type="text" readonly="true">
+                                    </div>
+                                    <label class="col-sm-2 control-label">波特率：</label>
+                                    <div class="col-sm-4">
+                                        <input name="baudrate" class="form-control serial-printer" type="text" readonly="true">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">IP地址：</label>
+                                    <div class="col-sm-4">
+                                        <input name="ipAddress" class="form-control online-printer" type="text" readonly="true">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">自动切纸：</label>
+                                    <div class="col-sm-4">
+                                        <div class="radio i-checks">
+                                            <label>
+                                                <input type="radio" value="false" name="autoCut"> <i></i>否</label>
+                                            <label>
+                                                <input type="radio" value="true" name="autoCut" checked> <i></i>是</label>
+                                        </div>
+                                    </div>
+                                    <label class="col-sm-2 control-label">设为默认打印机：</label>
+                                    <div class="col-sm-4">
+                                        <div class="radio i-checks">
+                                            <label>
+                                                <input type="radio" value="false" name="isDefault" checked> <i></i>否</label>
+                                            <label>
+                                                <input type="radio" value="true" name="isDefault"> <i></i>是</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group toolbar">
+                                    <div class="col-sm-7 col-sm-offset-5">
+                                        #if($oper != "look")
+                                        <button class="btn btn-primary" type="submit">提交</button>
+                                        #end
+                                        <button class="btn btn-primary" type="button" id="closeLayer">关闭</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/iCheck/icheck.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="$URL/asset/bk/my-selector.js?v=fdd"></script>
+#parse("templates/common/foot.vm")
+<script>
+    $(document).ready(function () {
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+    });
+
+    $("select[name='driverType']").on("change", function(){
+        var driverType = $(this).val();
+        driverInputBind(driverType);
+    })
+
+    //加载上层编辑的数据
+    if("add" != "$oper"){
+        var parentEditObj = parent.Global.editObj;
+        driverInputBind(parentEditObj.driverType);
+        iniDataToForm(parentEditObj);
+    }
+
+    //初始化表单
+    $("#signupForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("signupForm");
+        layer.load();
+        jQuery.ajax({
+            url : "$URL/merchant/admin/printer/editPrinter",
+            data : {dataStr : JSON.stringify(formData), oper : "$oper"},
+            type : "post",
+            success : function(res){
+                if(res.resultCode == 'SUCCESS'){
+                    layer.msg("操作成功！");
+                    layer.closeAll("loading");
+                    closeCurrentLayerPage();
+                }else {
+                    layer.alert(res.errCodeDesc);
+                    layer.closeAll("loading");
+                }
+            }
+        })
+    }});
+
+    function driverInputBind(driverType){
+        if(driverType == 0){
+            $(".online-printer").attr("readonly", "true");
+            $(".serial-printer").attr("readonly", "true");
+            $("#driverLocal").removeClass("hidden");
+            $("#driverOnline").addClass("hidden").attr("disabled", "disabled");
+        }else if(driverType == 1){
+            $(".online-printer").removeAttr("readonly");
+            $(".serial-printer").attr("readonly", "true");
+            $("#driverOnline").removeClass("hidden").removeAttr("disabled");
+            $("#driverLocal").addClass("hidden").attr("disabled", "disabled");
+        }else {
+            $(".online-printer").attr("readonly", "true");
+            $(".serial-printer").removeAttr("readonly");
+            $("#driverLocal").removeClass("hidden");
+            $("#driverOnline").addClass("hidden").attr("disabled", "disabled");
+        }
+    }
+
+</script>
+
+</body>
+</html>

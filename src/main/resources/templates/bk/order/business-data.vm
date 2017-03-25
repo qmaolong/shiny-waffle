@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("templates/common/base-bk.vm")
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小票格式列表</title>
+
+     <link href="$URL/asset/bk/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="$URL/asset/bk/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/animate.min.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+    <link href="$URL/asset/bk/css/plugins/chosen/chosen.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">条件筛选</a>
+            </li>
+            <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">周期对比</a>
+            </li>
+        </ul>
+        <div class="tab-content m-b-md">
+            <div id="tab-1" class="tab-pane active">
+                <div class="panel-body" style="border-color:#ddd">
+                    <form class="form-horizontal" id="searchForm">
+                        <div class="col-sm-10 b-r m-t-sm">
+                            <div class="form-group" style="margin-bottom:4px">
+                                <label class="col-sm-2 control-label">门店:</label>
+                                <div class="col-sm-3">
+                                    <select name="shopId" class="form-control" minlength="1" type="text">
+                                        <option value="">全部</option>
+                                        #foreach($shop in $!shopList)
+                                            <option value="$!{shop.objectIdStr}" #if($!{shop.objectIdStr}==$!shopIdSession)selected#end>$!{shop.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+
+                                <label class="col-sm-1 control-label">日期:</label>
+                                <div class="col-sm-5">
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <input type="text" class="input-sm form-control" data-type="date" name="startDate" />
+                                        <span class="input-group-addon">到</span>
+                                        <input type="text" class="input-sm form-control" data-type="date" name="endDate" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom:2px">
+                                <label class="col-sm-2 control-label">操作人员:</label>
+                                <div class="col-sm-3">
+                                    <select name="operator" class="form-control" minlength="1" type="text">
+                                        <option value="">全部</option>
+                                        #foreach($section in $sections)
+                                            #foreach($clerk in ${section.clerks})
+                                                <option value="$!{clerk.name}">$!{clerk.name}</option>
+                                            #end
+                                        #end
+                                    </select>
+                                </div>
+                                <label class="col-sm-1 control-label">时段:</label>
+                                <div class="col-sm-5">
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <div class="input-group clockpicker" data-autoclose="true">
+                                            <input type="text" class="input-sm form-control" name="dayOn" value="00:00">
+                                        </div>
+                                        <span class="input-group-addon">到</span>
+                                        <div class="input-group clockpicker" #*data-placement="left" data-align="top"*# data-autoclose="true">
+                                            <input type="text" class="input-sm form-control" name="dayOff" value="23:59">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            #*<div class="form-group text-center m-t-xs" style="margin-bottom:5px">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" type="button">快速<span class="caret"></span></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#" id="addSingle">本月</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#" id="addSuite">本周</a></li>
+                                </ul>
+                            </div>*#
+                            <div class="form-group text-center m-t-md">
+                                <button class="btn btn-success btn-sm" type="submit">&nbsp;筛选&nbsp;</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="tab-2" class="tab-pane">
+                <div class="panel-body">
+                    <form class="form-horizontal" id="compareForm">
+                        <div class="col-sm-10 b-r m-t-sm">
+                            <div class="form-group" style="margin-bottom:4px">
+                                <label class="col-sm-2 control-label">门店:</label>
+                                <div class="col-sm-3">
+                                    <select name="shopId" class="form-control" minlength="1" type="text">
+                                        <option value="">全部</option>
+                                        #foreach($shop in $!shopList)
+                                            <option value="$!{shop.objectIdStr}" #if($!{shop.objectIdStr}==$!shopIdSession)selected#end>$!{shop.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+
+                                <label class="col-sm-2 control-label">日期范围:</label>
+                                <div class="col-sm-5">
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <input type="text" class="input-sm form-control" data-type="date" name="startDate" required />
+                                        <span class="input-group-addon">到</span>
+                                        <input type="text" class="input-sm form-control" data-type="date" name="endDate" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom:4px">
+                                <label class="col-sm-2 control-label">操作人员:</label>
+                                <div class="col-sm-3">
+                                    <select name="operator" class="form-control" minlength="1" type="text">
+                                        <option value="">全部</option>
+                                        #foreach($section in $sections)
+                                            #foreach($clerk in ${section.clerks})
+                                                <option value="$!{clerk.name}">$!{clerk.name}</option>
+                                            #end
+                                        #end
+                                    </select>
+                                </div>
+                                <label class="col-sm-2 control-label">时段:</label>
+                                <div class="col-sm-5">
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <div class="input-group clockpicker" data-autoclose="true">
+                                            <input type="text" class="input-sm form-control" name="dayOn" value="00:00">
+                                        </div>
+                                        <span class="input-group-addon">到</span>
+                                        <div class="input-group clockpicker" #*data-placement="left" data-align="top"*# data-autoclose="true">
+                                            <input type="text" class="input-sm form-control" name="dayOff" value="23:59">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom:4px">
+                                <label class="col-sm-2 control-label">周期:</label>
+                                <div class="col-sm-3">
+                                    <select name="period" class="form-control" minlength="1" type="text">
+                                        <option value="week">每周</option>
+                                        <option value="month">每月</option>
+                                        <option value="year">每年</option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-2 control-label">特定时间:</label>
+                                <div class="col-sm-5">
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <select name="specialTimeOn" class="form-control special-time" minlength="1" type="text">
+                                            <option value="1">周一</option>
+                                            <option value="2">周二</option>
+                                            <option value="3">周三</option>
+                                            <option value="4">周四</option>
+                                            <option value="5">周五</option>
+                                            <option value="6">周六</option>
+                                            <option value="7">周日</option>
+                                        </select>
+                                        <span class="input-group-addon">到</span>
+                                        <select name="specialTimeOff" class="form-control special-time" minlength="1" type="text">
+                                            <option value="1">周一</option>
+                                            <option value="2">周二</option>
+                                            <option value="3">周三</option>
+                                            <option value="4">周四</option>
+                                            <option value="5">周五</option>
+                                            <option value="6">周六</option>
+                                            <option value="7">周日</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                #*#if($!shopList)
+                                    <label class="col-sm-1 control-label">门店:</label>
+                                    <div class="col-sm-3">
+                                        <select name="shopId" class="form-control" minlength="1" type="text">
+                                            #foreach($shop in $!shopList)
+                                                <option value="$!{shop.objectIdStr}" #if($!{shop.objectIdStr}==$!shopIdSession)selected#end>$!{shop.name}</option>
+                                            #end
+                                        </select>
+                                    </div>
+                                #end*#
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            #*<div class="form-group text-center m-t-md" style="margin-bottom:14px">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" type="button">快速<span class="caret"></span></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#" id="addSingle">本月</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#" id="addSuite">本周</a></li>
+                                </ul>
+                            </div>*#
+                            <div class="form-group text-center m-t-md">
+                                <button class="btn btn-success btn-sm" type="submit">&nbsp;对比&nbsp;</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Panel Other -->
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="row row-lg">
+                <div class="col-sm-12">
+                    <!-- Example Events -->
+                    <div id="toolbar" class="btn-group">
+                        <button type="button" class="btn btn-default look">
+                            <i class="glyphicon glyphicon-search"></i>&nbsp;查看详情
+                        </button>
+                        #*<button type="button" class="btn btn-default closeFrame">
+                            <i class="glyphicon glyphicon-remove"></i>&nbsp;关闭
+                        </button>*#
+                    </div>
+                    <table id="table" data-height="500"
+                           data-toggle="table"
+                           data-striped="true"
+                           data-show-toggle="true"
+                           data-show-columns="true"
+                           data-toolbar="#toolbar" data-mobile-responsive="true"
+                           data-show-export="true"
+                           data-export-data-type="all">
+                        <thead>
+                        <tr>
+                            <th data-field="dateStr" data-formatter="dateStrFormatter">销售日期</th>
+                            <th data-field="shopName">店名</th>
+                            <th data-field="superFlag" data-formatter="typeFormatter">类型</th>
+                            <th data-field="orderCount" >订单量</th>
+                            <th data-field="people" >客流量</th>
+                            <th data-field="businessIncome" >营业收入</th>
+                            <th data-field="extraIncome" >非营业收入</th>
+##                            <th data-field="totalIncome" >总收入</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <!-- End Example Events -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+</div>
+<script src="$URL/asset/bk/js/jquery.min.js?v=2.1.4"></script>
+<script src="$URL/asset/bk/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/layer.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/layer/laydate/laydate.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="$URL/asset/bk/js/plugins/validate/messages_zh.min.js"></script>
+<script src="$URL/asset/bk/js/bootstrap-table-toolbar.js"></script>
+<script src="$URL/asset/bk/js/content.min.js"></script>
+<script src="$URL/asset/bk/js/bootstrap-table-export.js?v=1"></script>
+<script src="$URL/asset/bk/js/tableExport.js"></script>
+<script src="$URL/asset/bk/js/plugins/clockpicker/clockpicker.js"></script>
+<script src="$URL/asset/bk/js/plugins/chosen/chosen.jquery.js"></script>
+    #parse("templates/common/foot.vm")
+<script type="text/javascript">
+    $('.clockpicker').clockpicker({
+        afterShow : function(){
+            $(".clockpicker-popover").css("z-index", "999999999");
+        }
+    })
+    $('.chosen-select').chosen({width: "330px"});
+
+    $("#table").bootstrapTable({
+        data : []
+    });
+
+    //初始化筛选表单
+    $("#searchForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("searchForm");
+        layer.load();
+        jQuery.ajax({
+            url : "$URL/merchant/admin/order/getBusinessData",
+            data : {dataStr : JSON.stringify(formData)},
+            type : "post",
+            success : function(res){
+                $("#table").bootstrapTable('load',{
+                    data : responseHandler(res)
+                });
+                layer.closeAll("loading");
+            }
+        })
+    }});
+
+    //初始化横向对比表单
+    $("#compareForm").validate({submitHandler: function() {
+        var formData = getDataFromForm("compareForm");
+        if(Number(formData.specialTimeOn) > Number(formData.specialTimeOff)){
+            layer.msg("特殊时间段结束时间不可小于开始时间");
+            return;
+        }
+        layer.load();
+        jQuery.ajax({
+            url : "$URL/merchant/admin/order/periodCompare",
+            data : {dataStr : JSON.stringify(formData)},
+            type : "post",
+            success : function(res){
+                $("#table").bootstrapTable('load',{
+                    data : responseHandler(res)
+                });
+                layer.closeAll("loading");
+            }
+        })
+    }});
+
+    function dateStrFormatter(value){
+        if(isNull(value)){
+            return "所有";
+        }
+        return value;
+    }
+    function typeFormatter(data){
+        if(data)
+            return '总店';
+        else if(data)
+            return '分店';
+        else
+            return '全部';
+    }
+
+    $("select[name='period'").on("change", function(){
+        var period = $(this).val();
+        if("year" == period){
+            var content = "";
+            for (var i=1; i<=12; i++){
+                content += "<option value='" + i + "'>" + i + "月</option>"
+            }
+            $(".special-time").html($(content));
+        }else if("month" == period){
+            var content = "";
+            for (var i=1; i<=31; i++){
+                content += "<option value='" + i + "'>" + i + "日</option>"
+            }
+            $(".special-time").html($(content));
+        }else if("week" == period){
+            var content = "<option value='1'>周一</option>" +
+                    "<option value='2'>周二</option>" +
+                    "<option value='3'>周三</option>" +
+                    "<option value='4'>周四</option>" +
+                    "<option value='5'>周五</option>" +
+                    "<option value='6'>周六</option>" +
+                    "<option value='7'>周日</option>";
+            $(".special-time").html($(content));
+        }
+    })
+
+    $(".look").on("click", function(){
+        var row = getSelectedRow("#table");
+        if(isNull(row)){
+            layer.msg("请先选中一行");
+            return;
+        }
+        layer.open({
+            title: "统计详情",
+            type:2,
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 1, //不显示关闭按钮
+            shift: 2,
+            maxmin: true,
+            area: ['90%', '520px'],
+            shadeClose: false, //开启遮罩关闭
+            content: '$URL/merchant/admin/order/businessDataDetail?content=' + encodeURI(JSON.stringify(row)),
+            end: function () {
+                $("button[name='refresh']").click();
+            },
+            success: function (layero, index) {
+
+            }
+        })
+    })
+
+    //默认查询当月数据
+    var firstMonthDay = new Date().Format("yyyy-MM-01");
+    $("input[name='startDate'").val(firstMonthDay);
+    $("#searchForm").submit();
+
+</script>
+</body>
+</html>
